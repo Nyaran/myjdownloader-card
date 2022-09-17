@@ -1,8 +1,8 @@
 {
-  "transmission-card": {
-    "version": "0.8.3",
-    "updated_at": "2022-03-06",
-    "visit_repo": "https://github.com/amaximus/transmission-card",
-    "changelog": "https://github.com/amaximus/transmission-card/releases/0.8.3"
-  }
+  "myjdownloader-card": {
+    "version": "0.0.0",
+    "updated_at": "2022-09-10",
+    "visit_repo": "https://github.com/Nyaran/myjdownloader-card",
+    "changelog": "https://github.com/Nyaran/myjdownloader-card/releases/0.0.0"
+ }
 }

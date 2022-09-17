@@ -1,5 +1,5 @@
 {
-  "name": "Transmission Card",
-  "filename": "transmission-card.js",
-  "render_readme": "true"
+  "name": "MyJDownloader Card",
+  "filename": "myjdownloader-card.js",
+  "render_readme": "false"
 }

@@ -1,0 +1,37 @@
+{
+  "common": {
+    "version": "Version"
+  },
+  "config": {
+    "invalid": "Invalid configuration",
+    "wrong_display_mode": "display_mode accepts only 'compact' and 'full' as value",
+    "header_title": "Title",
+    "sensor_name": "Sensor name",
+    "display_mode": "Display mode",
+    "display_mode_label": {
+      "full": "Full",
+      "compact": "Compact"
+    },
+    "hide_title": "Hidle title",
+    "hide_instance": "Hide instance selector",
+    "hide_speed_limit": "Hide speed limit button",
+    "hide_playpause": "Hide play/pause button"
+  },
+  "status": {
+    "no_sensor": "No sensor",
+    "stopped": "Stopped",
+    "downloading": "Downloading",
+    "finished": "Finished",
+    "running": "Running",
+    "pause": "Paused",
+    "idle": "Idle"
+  },
+  "downloads": {
+    "no_downloads": "No downloads"
+  },
+  "actions": {
+    "speed_limit": "Speed Limit",
+    "play_all": "Play all",
+    "pause_all": "Pause all"
+  }
+}
