@@ -12,6 +12,7 @@
       "full": "Full",
       "compact": "Compact"
     },
+    "default_instance": "Default instance",
     "hide_title": "Hidle title",
     "hide_instance": "Hide instance selector",
     "hide_speed_limit": "Hide speed limit button",
