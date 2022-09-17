@@ -1,8 +1,8 @@
 {
   "myjdownloader-card": {
-    "version": "0.0.0",
-    "updated_at": "2022-09-10",
+    "version": "1.0.0-beta.-1",
+    "updated_at": "2022-09-17",
     "visit_repo": "https://github.com/Nyaran/myjdownloader-card",
-    "changelog": "https://github.com/Nyaran/myjdownloader-card/releases/0.0.0"
+    "changelog": "https://github.com/Nyaran/myjdownloader-card/releases/1.0.0"
  }
 }

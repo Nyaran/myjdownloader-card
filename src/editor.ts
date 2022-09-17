@@ -2,14 +2,14 @@ import {html, LitElement, TemplateResult} from 'lit';
 import {fireEvent, HomeAssistant, LovelaceCardEditor} from 'custom-card-helpers';
 import {ScopedRegistryHost} from '@lit-labs/scoped-registry-mixin';
 import {MyJDownloaderCardConfig} from './types';
-import {customElement, property, state} from 'lit/decorators';
+import {customElement, property, state} from 'lit/decorators.js';
 import {localize} from './localize/localize';
 
 const SCHEMA = [
-  {name: "header_title", selector: {text: {}}},
-  {name: "sensor_name", selector: {text: {}}},
+  {name: 'header_title', selector: {text: {}}},
+  {name: 'sensor_name', selector: {text: {}}},
   {
-    name: "display_mode",
+    name: 'display_mode',
     selector: {
       select: {
         options: ['compact', 'full'].map(value => ({
@@ -19,15 +19,15 @@ const SCHEMA = [
       },
     },
   },
-  {name: "default_instance", selector: {text: {}}},
+  {name: 'default_instance', selector: {text: {}}},
   {
-    name: "",
-    type: "grid",
+    name: '',
+    type: 'grid',
     schema: [
-      {name: "hide_title", selector: {boolean: {}}},
-      {name: "hide_instance", selector: {boolean: {}}},
-      {name: "hide_speed_limit", selector: {boolean: {}}},
-      {name: "hide_playpause", selector: {boolean: {}}},
+      {name: 'hide_title', selector: {boolean: {}}},
+      {name: 'hide_instance', selector: {boolean: {}}},
+      {name: 'hide_speed_limit', selector: {boolean: {}}},
+      {name: 'hide_playpause', selector: {boolean: {}}},
     ],
   },
 ] as const;
@@ -76,7 +76,7 @@ export class MyJDownloaderCardEditor extends ScopedRegistryHost(LitElement) impl
 
   private _valueChanged(ev): void {
     console.log('ev.detail.value', ev.detail.value);
-    fireEvent(this, "config-changed", {config: ev.detail.value});
+    fireEvent(this, 'config-changed', {config: ev.detail.value});
   }
 
   private _computeLabelCallback(schema: typeof SCHEMA[number]) {

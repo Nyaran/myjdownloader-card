@@ -1,5 +1,5 @@
 import {css, html, LitElement, PropertyValues} from 'lit';
-import {customElement, property, state} from 'lit/decorators';
+import {customElement, property, state} from 'lit/decorators.js';
 import {getLovelace, hasConfigOrEntityChanged, HomeAssistant, LovelaceCardEditor} from 'custom-card-helpers';
 import {MyJDownloaderCardConfig} from './types';
 import {CARD_VERSION} from './const';
@@ -111,11 +111,11 @@ export class MyJDownloaderCard extends LitElement {
           <div id="downloads">
             ${Object.keys(downloads).length > 0
                 ? this.config.display_mode === 'compact'
-                    ? html`
+                  ? html`
                       <div class="mode-compact">
                         ${Object.entries(downloads).map(([uuid, pack]) => this.renderPackage(uuid, pack))}
                       </div>`
-                    : html`
+                  : html`
                       <div class="mode-full">
                         ${Object.entries(downloads).map(([uuid, pack]) => this.renderPackageFull(uuid, pack))}
                       </div>`
@@ -195,12 +195,12 @@ export class MyJDownloaderCard extends LitElement {
         down_speed: this.hass.states[`${sensor_prefix}_download_speed`].state,
         down_unit: this.hass.states[`${sensor_prefix}_download_speed`].attributes.unit_of_measurement,
         status: this.hass.states[`${sensor_prefix}_status`].state,
-      }
+      };
     }
     return {
       down_speed: undefined,
-      down_unit: "B/s",
-      status: "no_sensor",
+      down_unit: 'B/s',
+      status: 'no_sensor',
     };
   }
 
@@ -299,7 +299,7 @@ export class MyJDownloaderCard extends LitElement {
           ${pack.links.map(link => this.renderLinkFull(link))}
         </div>
       </div>
-    `
+    `;
   }
 
   renderLinkFull(link) {
@@ -315,7 +315,7 @@ export class MyJDownloaderCard extends LitElement {
         </div>
         <div class="link_details">${link.percent.toFixed(2)} %</div>
       </div>
-    `
+    `;
   }
 
   renderLimitButton() {
