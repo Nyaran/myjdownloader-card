@@ -77,7 +77,9 @@ export class MyJDownloaderCard extends LitElement {
       ...config,
     };
 
-    this.selectedInstance = this.config.default_instance;
+    if (this.config.default_instance != null) {
+      this.selectedInstance = this.config.default_instance;
+    }
   }
 
   protected shouldUpdate(changedProps: PropertyValues): boolean {
@@ -393,6 +395,10 @@ export class MyJDownloaderCard extends LitElement {
     `;
   }
 
+  /**
+   * Card height. A height of 1 is equivalent to 50 pixels
+   * download size: 28px
+   */
   getCardSize() {
     return 1;
   }
