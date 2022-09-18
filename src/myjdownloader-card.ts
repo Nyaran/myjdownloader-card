@@ -487,13 +487,16 @@ export class MyJDownloaderCard extends LitElement {
       }
 
       /* Download status */
-
       .downloading {
         background-color: var(--paper-item-icon-active-color);
       }
 
       .stopped {
         background-color: var(--label-badge-grey);
+      }
+      
+      .finished {
+        background-color: var(--light-primary-color);
       }
 
       .links {
