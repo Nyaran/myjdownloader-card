@@ -32,11 +32,9 @@
   ],
   "module": "myjdownloader-card.js",
   "scripts": {
-    "clean": "rimraf dist myjdownloader-card-*.tgz",
+    "clean": "rimraf dist",
     "start": "run-s 'rollup -- --watch'",
     "build": "run-s clean lint rollup",
-    "package": "run-s build :package",
-    ":package": "tar -cvf myjdownloader-card-$(node -p \"require('./package.json').version\").tgz dist",
     "lint": "eslint src/*.ts",
     "rollup": "rollup -c rollup.config.js"
   },
