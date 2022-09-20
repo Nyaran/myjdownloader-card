@@ -114,15 +114,12 @@ export class MyJDownloaderCard extends LitElement {
           </div>
           <div id="downloads">
             ${Object.keys(downloads).length > 0
-                ? this.config.display_mode === 'compact'
-                    ? html`
-                      <div class="mode-compact">
-                        ${Object.entries(downloads).map(([uuid, pack]) => this.renderPackage(uuid, pack))}
-                      </div>`
-                    : html`
-                      <div class="mode-full">
-                        ${Object.entries(downloads).map(([uuid, pack]) => this.renderPackageFull(uuid, pack))}
-                      </div>`
+                ? html`
+                  <div class="mode-${this.config.display_mode}">
+                    ${this.config.display_mode === 'compact'
+                        ? Object.entries(downloads).map(([uuid, pack]) => this.renderPackage(uuid, pack))
+                        : Object.entries(downloads).map(([uuid, pack]) => this.renderPackageFull(uuid, pack))}
+                  </div>`
                 : html`
                   <div class="no-downloads">${localize('downloads.no_downloads')}</div>`
             }
