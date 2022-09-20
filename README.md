@@ -7,7 +7,7 @@
 # Custom MyJDownloader Card for HomeAssistant/Lovelace
 
 This Lovelace custom card displays downloads information provided by the MyJDownloader Integration.
-It also supports enable limit speed mode and play/pause of all downloads.
+It also supports enable limit speed mode and play/pause/stop of all downloads.
 If you have multiple MyJDownloader instances associated to your account, you can cycle through all of them.
 
 ## Installation
@@ -54,10 +54,11 @@ resources:
 | display_mode     | string  | optional     | `compact`       | Display mode: compact or full                                |
 | default_instance | string  | optional     |                 | Default instance to show, if not set, the first one is used. |
 | hide_title       | boolean | optional     | false           | Hide header text at the top of card                          |
-| hide_instance    | boolean | optional     | true            | Hide MyJDownloader instance selector                         |
+| hide_instance    | boolean | optional     | false           | Hide MyJDownloader instance selector                         |
+| hide_play        | boolean | optional     | false           | Hide play button                                             |
+| hide_pause       | boolean | optional     | false           | Hide pause button                                            |
+| hide_stop        | boolean | optional     | false           | Hide stop button                                             |
 | hide_speed_limit | boolean | optional     | false           | Hide speed limit button                                      |
-| hide_playpause   | boolean | optional     | false           | Hide play/pause button                                       |
-
 Please find below an example of ui-lovelace.yaml card entry:
 
 ```yaml

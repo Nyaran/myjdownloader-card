@@ -20,5 +20,5 @@ export interface MyJDownloaderCardConfig extends LovelaceCardConfig {
   hide_title?: boolean;
   hide_instance?: boolean;
   hide_speed_limit?: boolean;
-  hide_playpause?: boolean;
+  hide_pause?: boolean;
 }

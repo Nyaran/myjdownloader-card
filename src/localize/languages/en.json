@@ -13,15 +13,18 @@
       "compact": "Compact"
     },
     "default_instance": "Default instance",
-    "hide_title": "Hidle title",
+    "hide_title": "Hide title",
     "hide_instance": "Hide instance selector",
-    "hide_speed_limit": "Hide speed limit button",
-    "hide_playpause": "Hide play/pause button"
+    "hide_play": "Hide play button",
+    "hide_pause": "Hide pause button",
+    "hide_stop": "Hide stop button",
+    "hide_speed_limit": "Hide speed limit button"
   },
   "status": {
     "no_sensor": "No sensor",
     "stopped": "Stopped",
     "downloading": "Downloading",
+    "stopping": "Stopping",
     "finished": "Finished",
     "running": "Running",
     "pause": "Paused",
@@ -31,8 +34,9 @@
     "no_downloads": "No downloads"
   },
   "actions": {
-    "speed_limit": "Speed Limit",
-    "play_all": "Play all",
-    "pause_all": "Pause all"
+    "play": "Start Downloads",
+    "pause": "Pause Downloads",
+    "stop": "Stop Downloads",
+    "speed_limit": "Speed Limit"
   }
 }

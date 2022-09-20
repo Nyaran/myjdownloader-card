@@ -26,8 +26,10 @@ const SCHEMA = [
     schema: [
       {name: 'hide_title', selector: {boolean: {}}},
       {name: 'hide_instance', selector: {boolean: {}}},
+      {name: 'hide_play', selector: {boolean: {}}},
+      {name: 'hide_pause', selector: {boolean: {}}},
+      {name: 'hide_stop', selector: {boolean: {}}},
       {name: 'hide_speed_limit', selector: {boolean: {}}},
-      {name: 'hide_playpause', selector: {boolean: {}}},
     ],
   },
 ] as const;
@@ -60,6 +62,9 @@ export class MyJDownloaderCardEditor extends ScopedRegistryHost(LitElement) impl
           .computeLabel=${(this._computeLabelCallback.bind(this))}
           @value-changed=${this._valueChanged}
       ></ha-form>
+      ----------
+      <ha-device-picker .label="Label" .value="Value" .devices="Devices" .areas="Areas" .entities="Entities"></ha-device-picker>
+      ----------
     `;
   }
 
