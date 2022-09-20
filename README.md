@@ -12,6 +12,10 @@ If you have multiple MyJDownloader instances associated to your account, you can
 
 ## Installation
 
+### Prerequisites
+ - Install and configure [MyJDownloader integration](https://github.com/doudz/homeassistant-myjdownloader).
+ - Enable `sensor.jdownloader_<instance-name>_packages` and `sensor.jdownloader_<instance-name>_packages` entities.
+
 ### [HACS](https://hacs.xyz/) method (recommended)
 
 MyJDownloader Card is available in HACS (Home Assistant Community Store).
