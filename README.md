@@ -1,9 +1,10 @@
-[![hacs_badge](https://img.shields.io/badge/HACS-Custom-orange.svg)](https://github.com/hacs/integration)
+[![hacs_badge](https://img.shields.io/badge/HACS-Default-orange.svg)](https://github.com/hacs/integration)
+![GitHub all releases](https://img.shields.io/github/downloads/Nyaran/myjdownloader-card/total)
 
 [![Ko-fi](https://img.shields.io/badge/Ko--fi-Nyaran-blue?logo=ko-fi)](https://ko-fi.com/nyaran)
 [![Buy me a coffee](https://img.shields.io/badge/Buy%20me%20a%20coffee-Nyaran-blue?logo=buy-me-a-coffee)](https://www.buymeacoffee.com/nyaran)
 
-# Custom MyJDownloader card for HomeAssistant/Lovelace
+# Custom MyJDownloader Card for HomeAssistant/Lovelace
 
 This Lovelace custom card displays downloads information provided by the MyJDownloader Integration.
 It also supports enable limit speed mode and play/pause of all downloads.
@@ -11,30 +12,31 @@ If you have multiple MyJDownloader instances associated to your account, you can
 
 ## Installation
 
-### - Manual method
+### [HACS](https://hacs.xyz/) method (recommended)
 
-- Download
-  the [latest release](https://github.com/Nyaran/myjdownloader-card/releases/latest/download/myjdownloader-card.tgz)
+MyJDownloader Card is available in HACS (Home Assistant Community Store).
+
+- Install HACS if you don't have it already
+- Open HACS in Home Assistant
+- Go to "Frontend" section
+- Click button with "+" icon
+- Search for "MyJDownloader Card"
+
+Or just use [![Open your Home Assistant instance and open a repository inside the Home Assistant Community Store.](https://my.home-assistant.io/badges/hacs_repository.svg)](https://my.home-assistant.io/redirect/hacs_repository/?owner=Nyaran&repository=myjdownloader-card&category=plugin)
+
+### Manual method
+
+- Download the [latest release](https://github.com/Nyaran/myjdownloader-card/releases/latest/download/myjdownloader-card.tgz)
 - Extract content.
-- Copy the `myjdownloader-card/dist` folder into `www` folder into your HA installation, as explained
-  in [official documentation](https://developers.home-assistant.io/docs/frontend/custom-ui/registering-resources/)
-- Restart HA
-
-### - [HACS](https://hacs.xyz/) method (recommended)
-
-- Copy this repo URL
-- In the HACS section, add this repo as custom (mark as Lovelace in Category), as explained
-  in [official documentation](https://hacs.xyz/docs/faq/custom_repositories)
-- Restart HA
-
-### Lovelace UI configuration
-
-Please add the card to the resources in configuration.yaml:
+- Copy the `myjdownloader-card/dist` folder into `www` folder into your HA installation, as explained in [official documentation](https://developers.home-assistant.io/docs/frontend/custom-ui/registering-resources/)
+- Add the card to the resources in configuration.yaml:
 
 ```
 resources:
   - {type: js, url: '/hacsfiles/myjdownloader-card/myjdownloader-card.js'}
 ```
+
+- Restart HA
 
 ## Options
 
@@ -62,6 +64,7 @@ Please find below an example of ui-lovelace.yaml card entry:
 ```
 
 ## Preview
+
 MyJDownloader Card in "compact" mode (dark theme):
 
 ![MyJDownloader Card compact](./myjdownloader-card-compact-dark.png)
@@ -74,4 +77,4 @@ MyJDownloader Card in "full" mode (light theme):
 
 [@home-assistant](https://github.com/home-assistant/) and [@hacs](https://github.com/hacs/) teams, for their awesome work.
 
-[![@amaximus](https://github.com/amaximus.png?size=40) @amaximus](@amaximus) for his work on [transmission-card](https://github.com/amaximus/transmission-card), which this card is heavily inspired by.
+[![@amaximus](https://github.com/amaximus.png?size=40) @amaximus](https://github.com/amaximus/) for his work on [transmission-card](https://github.com/amaximus/transmission-card), which this card is heavily inspired by.
