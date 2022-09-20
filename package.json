@@ -24,7 +24,7 @@
     "homeassistant",
     "hass",
     "hacs",
-    "hacs-custom",
+    "hacs-default",
     "lovelace",
     "custom-cards",
     "myjdownloader",
