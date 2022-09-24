@@ -72,8 +72,10 @@ export class MyJDownloaderCard extends LitElement {
       default_instance: undefined,
       hide_title: false,
       hide_instance: false,
+      hide_play: false,
+      hide_pause: false,
+      hide_stop: false,
       hide_speed_limit: false,
-      hide_playpause: false,
       ...config,
     };
 
@@ -112,15 +114,12 @@ export class MyJDownloaderCard extends LitElement {
           </div>
           <div id="downloads">
             ${Object.keys(downloads).length > 0
-                ? this.config.display_mode === 'compact'
-                  ? html`
-                      <div class="mode-compact">
-                        ${Object.entries(downloads).map(([uuid, pack]) => this.renderPackage(uuid, pack))}
-                      </div>`
-                  : html`
-                      <div class="mode-full">
-                        ${Object.entries(downloads).map(([uuid, pack]) => this.renderPackageFull(uuid, pack))}
-                      </div>`
+                ? html`
+                  <div class="mode-${this.config.display_mode}">
+                    ${this.config.display_mode === 'compact'
+                        ? Object.entries(downloads).map(([uuid, pack]) => this.renderPackage(uuid, pack))
+                        : Object.entries(downloads).map(([uuid, pack]) => this.renderPackageFull(uuid, pack))}
+                  </div>`
                 : html`
                   <div class="no-downloads">${localize('downloads.no_downloads')}</div>`
             }
@@ -212,16 +211,24 @@ export class MyJDownloaderCard extends LitElement {
       : [];
   }
 
-  _toggleLimit() {
-    this.hass.callService('switch', 'toggle', {entity_id: `switch.${this.config.sensor_name}_${this._selectedInstanceEntity}_limit`});
-  }
-
   _toggleInstance(ev) {
     this.selectedInstance = ev.target.value;
   }
 
-  _playPause() {
+  _togglePlay() {
+    this.hass.callService('myjdownloader', 'start_downloads', {entity_id: `sensor.${this.config.sensor_name}_${this._selectedInstanceEntity}_status`});
+  }
+
+  _togglePause() {
     this.hass.callService('switch', 'toggle', {entity_id: `switch.${this.config.sensor_name}_${this._selectedInstanceEntity}_pause`});
+  }
+
+  _toggleStop() {
+    this.hass.callService('myjdownloader', 'stop_downloads', {entity_id: `sensor.${this.config.sensor_name}_${this._selectedInstanceEntity}_status`});
+  }
+
+  _toggleLimit() {
+    this.hass.callService('switch', 'toggle', {entity_id: `switch.${this.config.sensor_name}_${this._selectedInstanceEntity}_limit`});
   }
 
   _downloadStatus(download) {
@@ -246,8 +253,10 @@ export class MyJDownloaderCard extends LitElement {
           <ha-icon icon="mdi:download" class="down down-color title-item-icon"></ha-icon>
           <span>${stats.down_speed} ${stats.down_unit}</span>
         </div>
+        ${this.renderPlayButton()}
+        ${this.renderPauseButton()}
+        ${this.renderStopButton()}
         ${this.renderLimitButton()}
-        ${this.renderPlayPauseButton()}
       </div>
     `;
   }
@@ -320,6 +329,67 @@ export class MyJDownloaderCard extends LitElement {
     `;
   }
 
+  renderPlayButton() {
+    if (this.config.hide_play) {
+      return html``;
+    }
+
+    const state = this.hass.states[`sensor.${this.config.sensor_name}_${this._selectedInstanceEntity}_status`].state === 'stopped';
+    return html`
+      <div class="titleitem">
+        <ha-icon-button
+            class="play_${state ? 'on' : 'off'}"
+            @click="${this._togglePlay}"
+            title="${localize('actions.play')}"
+            id="play">
+          <ha-icon class="title-item-button" icon="mdi:play"></ha-icon>
+        </ha-icon-button>
+      </div>
+    `;
+  }
+
+  renderPauseButton() {
+    if (this.config.hide_pause) {
+      return html``;
+    }
+
+    if (typeof this.hass.states[`switch.${this.config.sensor_name}_${this._selectedInstanceEntity}_pause`] == 'undefined') {
+      return html``;
+    }
+
+    const state = this.hass.states[`switch.${this.config.sensor_name}_${this._selectedInstanceEntity}_pause`].state;
+    return html`
+      <div class="titleitem">
+        <ha-icon-button
+            class="pause_${state}"
+            @click="${this._togglePause}"
+            title="${localize('actions.pause')}"
+            id="pause">
+          <ha-icon class="title-item-button" icon="mdi:pause"></ha-icon>
+        </ha-icon-button>
+      </div>
+    `;
+  }
+
+  renderStopButton() {
+    if (this.config.hide_stop) {
+      return html``;
+    }
+
+    const state = this.hass.states[`sensor.${this.config.sensor_name}_${this._selectedInstanceEntity}_status`].state === 'stopped';
+    return html`
+      <div class="titleitem">
+        <ha-icon-button
+            class="stop_${state ? 'off' : 'on'}"
+            @click="${this._toggleStop}"
+            title="${localize('actions.stop')}"
+            id="stop">
+          <ha-icon class="title-item-button" icon="mdi:stop"></ha-icon>
+        </ha-icon-button>
+      </div>
+    `;
+  }
+
   renderLimitButton() {
     if (this.config.hide_speed_limit) {
       return html``;
@@ -338,31 +408,6 @@ export class MyJDownloaderCard extends LitElement {
             title="${localize('actions.speed_limit')}"
             id="speed_limit">
           <ha-icon class="title-item-button" icon="mdi:download-lock"></ha-icon>
-        </ha-icon-button>
-      </div>
-    `;
-  }
-
-  renderPlayPauseButton() {
-    if (this.config.hide_playpause) {
-      return html``;
-    }
-
-    if (typeof this.hass.states[`switch.${this.config.sensor_name}_${this._selectedInstanceEntity}_pause`] == 'undefined') {
-      return html``;
-    }
-
-    const state = this.hass.states[`switch.${this.config.sensor_name}_${this._selectedInstanceEntity}_pause`].state;
-    const stateName = state === 'on' ? 'pause' : 'play';
-    const actionName = state === 'on' ? 'play' : 'pause';
-    return html`
-      <div class="titleitem">
-        <ha-icon-button
-            class="${stateName}_all"
-            @click="${this._playPause}"
-            title="${localize(`actions.${actionName}_all`)}"
-            id="play-pause">
-          <ha-icon class="title-item-button" icon="mdi:${actionName}"></ha-icon>
         </ha-icon-button>
       </div>
     `;
@@ -493,6 +538,7 @@ export class MyJDownloaderCard extends LitElement {
       }
 
       /* Download status */
+
       .downloading {
         background-color: var(--paper-item-icon-active-color);
       }
@@ -500,7 +546,7 @@ export class MyJDownloaderCard extends LitElement {
       .stopped {
         background-color: var(--label-badge-grey);
       }
-      
+
       .finished {
         background-color: var(--light-primary-color);
       }
@@ -552,12 +598,16 @@ export class MyJDownloaderCard extends LitElement {
         color: var(--paper-item-icon-active-color);
       }
 
-      .play_all {
+      .pause_off {
         color: var(--light-primary-color);
       }
 
-      .pause_all {
+      .pause_on, .play_on, .stop_on {
         color: var(--primary-color);
+      }
+
+      .play_off, .stop_off {
+        color: var(--label-badge-grey);
       }
 
       .no-downloads {
