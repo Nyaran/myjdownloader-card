@@ -1,6 +1,6 @@
 {
   "name": "myjdownloader-card",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "This Lovelace custom card displays downloads information provided by the MyJDownloader Integration",
   "author": "Luis Zurro <luiszurrodecos@gmail.com>",
   "homepage": "https://github.com/Nyaran/myjdownloader-card#readme",
