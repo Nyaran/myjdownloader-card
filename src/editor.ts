@@ -8,29 +8,35 @@ import {localize} from './localize/localize';
 const SCHEMA = [
   {name: 'header_title', selector: {text: {}}},
   {name: 'sensor_name', selector: {text: {}}},
-  {
-    name: 'display_mode',
-    selector: {
-      select: {
-        options: ['compact', 'full'].map(value => ({
-          value,
-          label: localize(`config.display_mode_label.${value}`),
-        })),
-      },
-    },
-  },
-  {
-    name: 'list_mode',
-    selector: {
-      select: {
-        options: ['full', 'packages', 'links'].map(value => ({
-          value,
-          label: localize(`config.list_mode_label.${value}`),
-        })),
-      },
-    },
-  },
   {name: 'default_instance', selector: {text: {}}},
+  {
+    name: '',
+    type: 'grid',
+    schema: [
+      {
+        name: 'display_mode',
+        selector: {
+          select: {
+            options: ['compact', 'full'].map(value => ({
+              value,
+              label: localize(`config.display_mode_label.${value}`),
+            })),
+          },
+        },
+      },
+      {
+        name: 'list_mode',
+        selector: {
+          select: {
+            options: ['full', 'packages', 'links'].map(value => ({
+              value,
+              label: localize(`config.list_mode_label.${value}`),
+            })),
+          },
+        },
+      },
+    ],
+  },
   {
     name: '',
     type: 'grid',
@@ -73,9 +79,7 @@ export class MyJDownloaderCardEditor extends ScopedRegistryHost(LitElement) impl
           .computeLabel=${(this._computeLabelCallback.bind(this))}
           @value-changed=${this._valueChanged}
       ></ha-form>
-      ----------
       <ha-device-picker .label="Label" .value="Value" .devices="Devices" .areas="Areas" .entities="Entities"></ha-device-picker>
-      ----------
     `;
   }
 
