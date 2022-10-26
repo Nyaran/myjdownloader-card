@@ -40,6 +40,10 @@
   "downloads": {
     "no_downloads": "Sin descargas"
   },
+  "error": {
+    "no_sensor_packages": "El sensor 'packages' no está presente o no está habilitado. Habilitalo en su servicio correspondiente.",
+    "no_sensor_links": "El sensor 'links' no está presente o no está habilitado. Habilitalo en su servicio correspondiente."
+  },
   "actions": {
     "speed_limit": "Límite velocidad",
     "play": "Iniciar Descargas",
