@@ -106,7 +106,6 @@ export class MyJDownloaderCard extends LitElement {
       this.selectedInstance = this._getInstances()[0];
     }
 
-    const downloads = this._getDownloads();
     return html`
       <ha-card>
         <div class="card-header">
@@ -118,21 +117,36 @@ export class MyJDownloaderCard extends LitElement {
             ${this.renderToolbar()}
           </div>
           <div id="downloads">
-            ${Object.keys(downloads).length > 0
-                ? html`
-                  <div class="mode-${this.config.display_mode}">
-                    ${this._renderDownloads(downloads)}
-                  </div>`
-                : html`
-                  <div class="no-downloads">${localize('downloads.no_downloads')}</div>`
-            }
+            ${this._renderDownloads()}
           </div>
         </div>
       </ha-card>
     `;
   }
 
-  _renderDownloads(downloads) {
+  _renderDownloads() {
+    let downloads;
+    try {
+      downloads = this._getDownloads();
+    } catch (e) {
+      if (e instanceof Error && e.message.startsWith('error.no_sensor_')) {
+        return html`<div class="no-sensor">${localize(e.message)}</div>`;
+      }
+      throw e;
+    }
+
+    return html`
+      ${Object.keys(downloads).length > 0
+          ? html`
+            <div class="mode-${this.config.display_mode}">
+              ${this._renderDownloadList(downloads)}
+            </div>`
+          : html`
+            <div class="no-downloads">${localize('downloads.no_downloads')}</div>`
+      }`;
+  }
+
+  _renderDownloadList(downloads) {
     if (this.config.display_mode === 'compact') {
       if (['full', 'packages'].includes(this.config.list_mode as string)) {
         return Object.entries(downloads).map(([uuid, pack]) => this.renderPackage(uuid, pack));
@@ -148,64 +162,78 @@ export class MyJDownloaderCard extends LitElement {
     }
   }
 
+  _buildPackage(pack) {
+    return {
+      activeTask: pack.activeTask,
+      bytesLoaded: pack.bytesLoaded,
+      bytesTotal: pack.bytesTotal,
+      percent: ((100 * pack.bytesLoaded) / pack.bytesTotal) || 0,
+      childCount: pack.childCount,
+      comment: pack.comment,
+      downloadPassword: pack.downloadPassword,
+      enabled: pack.enabled,
+      eta: pack.eta,
+      finished: pack.finished,
+      hosts: pack.hosts,
+      name: pack.name,
+      priority: pack.priority,
+      running: pack.running,
+      saveTo: pack.saveTo,
+      speed: pack.speed,
+      status: pack.status,
+      statusIconKey: pack.statusIconKey,
+      links: [],
+    };
+  }
+
+  _buildLink(link) {
+    return {
+      addedDate: link.addedDate,
+      bytesLoaded: link.bytesLoaded,
+      bytesTotal: link.bytesTotal,
+      percent: ((100 * link.bytesLoaded) / link.bytesTotal) || 0,
+      comment: link.comment,
+      downloadPassword: link.downloadPassword,
+      enabled: link.enabled,
+      eta: link.eta,
+      extractionStatus: link.extractionStatus,
+      finished: link.finished,
+      finishedDate: link.finishedDate,
+      host: link.host,
+      name: link.name,
+      packageUUID: link.packageUUID,
+      priority: link.priority,
+      running: link.running,
+      skipped: link.skipped,
+      speed: link.speed,
+      status: link.status,
+      statusIconKey: link.statusIconKey,
+      url: link.url,
+      uuid: link.uuid,
+    };
+  }
+
   _getDownloads() {
     const downloads = {};
 
-    if (typeof this.hass.states[`sensor.${this.config.sensor_name}_${this.selectedInstanceEntity}_packages`] != 'undefined') {
-      if (['full', 'packages'].includes(this.config.list_mode as string)) {
+    if (['full', 'packages'].includes(this.config.list_mode as string)) {
+      if (typeof this.hass.states[`sensor.${this.config.sensor_name}_${this.selectedInstanceEntity}_packages`] == 'undefined') {
+        throw new Error('error.no_sensor_packages');
+      } else {
         const packages = this.hass.states[`sensor.${this.config.sensor_name}_${this.selectedInstanceEntity}_packages`].attributes['packages'];
         packages.forEach(pack => {
-          downloads[pack.uuid] = {
-            activeTask: pack.activeTask,
-            bytesLoaded: pack.bytesLoaded,
-            bytesTotal: pack.bytesTotal,
-            percent: ((100 * pack.bytesLoaded) / pack.bytesTotal) || 0,
-            childCount: pack.childCount,
-            comment: pack.comment,
-            downloadPassword: pack.downloadPassword,
-            enabled: pack.enabled,
-            eta: pack.eta,
-            finished: pack.finished,
-            hosts: pack.hosts,
-            name: pack.name,
-            priority: pack.priority,
-            running: pack.running,
-            saveTo: pack.saveTo,
-            speed: pack.speed,
-            status: pack.status,
-            statusIconKey: pack.statusIconKey,
-            links: [],
-          };
+          downloads[pack.uuid] = this._buildPackage(pack);
         });
       }
+    }
 
-      if (['full', 'links'].includes(this.config.list_mode as string)) {
+    if (['full', 'links'].includes(this.config.list_mode as string)) {
+      if (typeof this.hass.states[`sensor.${this.config.sensor_name}_${this.selectedInstanceEntity}_links`] == 'undefined') {
+        throw new Error('error.no_sensor_links');
+      } else {
         const links = this.hass.states[`sensor.${this.config.sensor_name}_${this.selectedInstanceEntity}_links`].attributes['links'];
         links.forEach(link => {
-          const linkData = {
-            addedDate: link.addedDate,
-            bytesLoaded: link.bytesLoaded,
-            bytesTotal: link.bytesTotal,
-            percent: ((100 * link.bytesLoaded) / link.bytesTotal) || 0,
-            comment: link.comment,
-            downloadPassword: link.downloadPassword,
-            enabled: link.enabled,
-            eta: link.eta,
-            extractionStatus: link.extractionStatus,
-            finished: link.finished,
-            finishedDate: link.finishedDate,
-            host: link.host,
-            name: link.name,
-            packageUUID: link.packageUUID,
-            priority: link.priority,
-            running: link.running,
-            skipped: link.skipped,
-            speed: link.speed,
-            status: link.status,
-            statusIconKey: link.statusIconKey,
-            url: link.url,
-            uuid: link.uuid,
-          };
+          const linkData = this._buildLink(link);
 
           if (this.config.list_mode === 'full') {
             downloads[link.packageUUID].links.push(linkData);
@@ -215,6 +243,7 @@ export class MyJDownloaderCard extends LitElement {
         });
       }
     }
+
     return downloads;
   }
 
@@ -637,8 +666,12 @@ export class MyJDownloaderCard extends LitElement {
         color: var(--label-badge-grey);
       }
 
-      .no-downloads {
+      .no-downloads, .no-sensor {
         margin-left: 1.4em;
+      }
+      
+      .no-sensor {
+        color: var(--error-color);
       }
 
       .mode-full {

@@ -40,6 +40,10 @@
   "downloads": {
     "no_downloads": "No downloads"
   },
+  "error": {
+    "no_sensor_packages": "The 'packages' sensor is not present or is not enabled. Enable it on its own service.",
+    "no_sensor_links": "The 'links' sensor is not present or is not enabled. Enable it on its own service."
+  },
   "actions": {
     "play": "Start Downloads",
     "pause": "Pause Downloads",
