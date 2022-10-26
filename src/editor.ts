@@ -19,6 +19,17 @@ const SCHEMA = [
       },
     },
   },
+  {
+    name: 'list_mode',
+    selector: {
+      select: {
+        options: ['full', 'packages', 'links'].map(value => ({
+          value,
+          label: localize(`config.list_mode_label.${value}`),
+        })),
+      },
+    },
+  },
   {name: 'default_instance', selector: {text: {}}},
   {
     name: '',

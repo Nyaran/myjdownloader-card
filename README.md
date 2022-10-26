@@ -47,19 +47,20 @@ resources:
 
 ### Card options
 
-| Name             | Type    | Required     | Default         | Description                                                  |
-|------------------|---------|--------------|-----------------|--------------------------------------------------------------|
-| type             | string  | **required** |                 | `custom:myjdownloader-card`                                  |
-| header_title     | string  | optional     | `MyJDownloader` | Header text at the top of card                               |
-| sensor_name      | string  | optional     | `jdownloader`   | Name of the sensor                                           |
-| display_mode     | string  | optional     | `compact`       | Display mode: compact or full                                |
-| default_instance | string  | optional     |                 | Default instance to show, if not set, the first one is used. |
-| hide_title       | boolean | optional     | false           | Hide header text at the top of card                          |
-| hide_instance    | boolean | optional     | false           | Hide MyJDownloader instance selector                         |
-| hide_play        | boolean | optional     | false           | Hide play button                                             |
-| hide_pause       | boolean | optional     | false           | Hide pause button                                            |
-| hide_stop        | boolean | optional     | false           | Hide stop button                                             |
-| hide_speed_limit | boolean | optional     | false           | Hide speed limit button                                      |
+| Name             | Type    | Required     | Default         | Description                                                                     |
+|------------------|---------|--------------|-----------------|---------------------------------------------------------------------------------|
+| type             | string  | **required** |                 | `custom:myjdownloader-card`                                                     |
+| header_title     | string  | optional     | `MyJDownloader` | Header text at the top of card                                                  |
+| sensor_name      | string  | optional     | `jdownloader`   | Name of the sensor                                                              |
+| display_mode     | string  | optional     | `compact`       | Display mode: compact or full                                                   |
+| list_mode        | string  | optional     | `full`          | List mode: "full" shows packages and links, or shown only "packages" or "links" |
+| default_instance | string  | optional     |                 | Default instance to show, if not set, the first one is used.                    |
+| hide_title       | boolean | optional     | false           | Hide header text at the top of card                                             |
+| hide_instance    | boolean | optional     | false           | Hide MyJDownloader instance selector                                            |
+| hide_play        | boolean | optional     | false           | Hide play button                                                                |
+| hide_pause       | boolean | optional     | false           | Hide pause button                                                               |
+| hide_stop        | boolean | optional     | false           | Hide stop button                                                                |
+| hide_speed_limit | boolean | optional     | false           | Hide speed limit button                                                         |
 Please find below an example of ui-lovelace.yaml card entry:
 
 ```yaml

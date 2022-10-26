@@ -16,6 +16,7 @@ export interface MyJDownloaderCardConfig extends LovelaceCardConfig {
   header_title?: string;
   sensor_name?: string;
   display_mode?: 'full' | 'compact';
+  list_mode?: 'full' | 'packages' | 'links';
   default_instance?: string;
   hide_title?: boolean;
   hide_instance?: boolean;
