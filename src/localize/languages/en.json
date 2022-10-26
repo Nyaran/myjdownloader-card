@@ -4,7 +4,6 @@
   },
   "config": {
     "invalid": "Invalid configuration",
-    "wrong_display_mode": "display_mode accepts only 'compact' and 'full' as value",
     "header_title": "Title",
     "sensor_name": "Sensor name",
     "display_mode": "Display mode",
@@ -12,6 +11,14 @@
       "full": "Full",
       "compact": "Compact"
     },
+    "wrong_display_mode": "'display_mode' accepts only 'compact' and 'full' as value",
+    "list_mode": "List mode",
+    "list_mode_label": {
+      "full": "Full",
+      "packages": "Packages",
+      "links": "Links"
+    },
+    "wrong_list_mode": "'list_mode' accepts only 'full', 'packages' and 'links' as value",
     "default_instance": "Default instance",
     "hide_title": "Hide title",
     "hide_instance": "Hide instance selector",
