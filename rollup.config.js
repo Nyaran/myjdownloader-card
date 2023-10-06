@@ -3,7 +3,7 @@ import nodeResolve from '@rollup/plugin-node-resolve';
 import typescript from '@rollup/plugin-typescript';
 import babel from '@rollup/plugin-babel';
 import json from '@rollup/plugin-json';
-import {terser} from 'rollup-plugin-terser';
+import terser from '@rollup/plugin-terser';
 import serve from 'rollup-plugin-serve';
 
 const dev = process.env.ROLLUP_WATCH;
@@ -40,7 +40,6 @@ export default [
       format: 'es',
     },
     plugins: [...plugins],
-    inlineDynamicImports: true,
     moduleContext: (id) => {
       const thisAsWindowForModules = [
         'node_modules/@formatjs/intl-utils/lib/src/diff.js',

@@ -1,12 +1,12 @@
 {
   "compilerOptions": {
-    "target": "es2017",
-    "module": "esnext",
+    "target": "ES2021",
+    "module": "ESNext",
     "moduleResolution": "node",
     "lib": [
-      "es2017",
-      "dom",
-      "dom.iterable"
+      "DOM",
+      "DOM.Iterable",
+      "ES2021"
     ],
     "noEmit": true,
     "noUnusedParameters": true,
