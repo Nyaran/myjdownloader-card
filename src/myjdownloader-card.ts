@@ -38,8 +38,12 @@ export class MyJDownloaderCard extends LitElement {
   private _selectedInstanceEntity!: string;
 
   set selectedInstance(name) {
+    const oldInstance = this._selectedInstance;
+
     this._selectedInstance = name;
     this._selectedInstanceEntity = name == null ? name : slugify(name);
+
+    this.requestUpdate('_selectedInstance', oldInstance);
   }
 
   get selectedInstance() {
@@ -92,6 +96,10 @@ export class MyJDownloaderCard extends LitElement {
   protected shouldUpdate(changedProps: PropertyValues): boolean {
     if (!this.config) {
       return false;
+    }
+
+    if (changedProps.has('_selectedInstance')) {
+      return true;
     }
 
     return hasConfigOrEntityChanged(this, changedProps, false);
@@ -490,7 +498,7 @@ export class MyJDownloaderCard extends LitElement {
           .value=${this.selectedInstance}>
         ${this._getInstances().map(
             (type) => html`
-              <mwc-list-item .value=${type}>${this.selectedInstance}</mwc-list-item>`,
+              <mwc-list-item .value=${type}>${type}</mwc-list-item>`,
         )}
       </ha-select>
     `;
