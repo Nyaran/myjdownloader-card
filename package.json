@@ -42,7 +42,7 @@
   "dependencies": {
     "@lit-labs/scoped-registry-mixin": "^1.0.1",
     "custom-card-helpers": "^1.9.0",
-    "lit": "^2.8.0"
+    "lit": "^3.0.0"
   },
   "devDependencies": {
     "@babel/plugin-proposal-class-properties": "^7.18.6",
