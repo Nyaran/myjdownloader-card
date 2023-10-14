@@ -2,72 +2,54 @@ name: Release
 on:
   workflow_dispatch:
     inputs:
-      draftRelease:
-        description: 'Draft release'
+      version_increment:
+        description: 'Version Increment Type'
+        type: choice
         required: true
-        default: true
+        options: ['patch', 'minor', 'major']
+        default: 'patch'
+      draft:
+        description: 'Release as Draft'
         type: boolean
-      dryRun:
-        description: 'Dry run'
         required: false
-        default: false
-        type: boolean
+        default: true
+
 jobs:
   release:
-    name: Release
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout Repo
+      - name: Checkout
         uses: actions/checkout@v4.1.0
+
       - name: Setup Node.js
         uses: actions/setup-node@v3
         with:
           node-version: 'lts/*'
+
       - name: Install dependencies
         run: npm install
-      - name: Run linter
+
+      - name: Run linter (if present)
         run: npm run lint --if-present
+
       - name: Run tests (if present)
         run: npm test --if-present
-      - name: Build Project
-        run: npm run build --if-present
-      - name: Archive production artifacts
-        uses: actions/upload-artifact@v2
-        with:
-          name: dist
-          path: dist/*.js
-      - name: Semantic Release
-        id: semantic
-        uses: cycjimmy/semantic-release-action@v4
-        with:
-          dry_run: ${{ github.event.inputs.dryRun }}
-          semantic_config: |
-            {
-              "branches": ["main"],
-              "plugins": [
-                ["@semantic-release/commit-analyzer", {"preset": "angular"}],
-                ["@semantic-release/release-notes-generator", {"preset": "angular"}],
-                ["@semantic-release/github", {"draft": ${{ github.event.inputs.draftRelease }} }]
-              ]
-            }
+
+      - name: Bump version and generate changelog
+        id: bumb-version
+        uses: phips28/gh-action-bump-version@v10.0.3
         env:
           GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
-      - name: Echo New Version
-        run: echo 'Publishing version ${{ steps.semantic.outputs.new_release_published }}'
-      - name: Download artefacts
-        uses: actions/download-artifact@v2
         with:
-          name: dist
-          path: dist
-      - name: Install GitHub CLI
-        run: |
-          sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-key C99B11DEB97541F0
-          sudo apt-add-repository https://cli.github.com/packages
-          sudo apt update
-          sudo apt install gh
-      - name: Authenticate GitHub CLI
-        run: gh auth login --with-token <<< "${{ secrets.GH_TOKEN }}"
-      - name: Upload assets to release
-        run: |
-          VERSION=$(echo ${{ steps.semantic.outputs.new_release_published }} | sed 's/^v//')
-          gh release upload "v$VERSION" dist/*
+          version-type: ${{ github.event.inputs.version_increment }}
+
+      - name: Build Project (if present)
+        run: npm run build --if-present
+
+      - name: Release
+        uses: softprops/action-gh-release@v1
+        with:
+          draft: ${{ github.event.inputs.draft }}
+          tag_name: ${{ steps.bumb-version.outputs.newVersion }}
+          generate_release_notes: true
+          files: dist/*.js
