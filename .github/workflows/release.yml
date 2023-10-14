@@ -3,16 +3,15 @@ on:
   workflow_dispatch:
     inputs:
       draftRelease:
-        description: 'Draft release: true, false'
+        description: 'Draft release'
         required: true
-        default: 'true'
+        default: true
+        type: boolean
       dryRun:
-        description: 'Dry run: true, false'
+        description: 'Dry run'
         required: false
-        default: 'false'
-      releaseNotes:
-        description: 'Release notes'
-        required: false
+        default: false
+        type: boolean
 jobs:
   release:
     name: Release
@@ -39,7 +38,7 @@ jobs:
               "plugins": [
                 ["@semantic-release/commit-analyzer", {"preset": "angular"}],
                 ["@semantic-release/release-notes-generator", {"preset": "angular"}],
-                ["@semantic-release/github", {"draft": ${{ github.event.inputs.draftRelease }}, "releaseNotes": "${{ github.event.inputs.releaseNotes }}"}]
+                ["@semantic-release/github", {"draft": ${{ github.event.inputs.draftRelease }} }]
               ]
             }
         env:
