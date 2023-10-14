@@ -32,22 +32,21 @@ const plugins = [
   ...(dev ? [serve(serveOpts)] : [terser()]),
 ];
 
-export default [
-  {
-    input: './src/myjdownloader-card.ts',
-    output: {
-      dir: './dist/',
-      format: 'es',
-    },
-    plugins: [...plugins],
-    moduleContext: (id) => {
-      const thisAsWindowForModules = [
-        'node_modules/@formatjs/intl-utils/lib/src/diff.js',
-        'node_modules/@formatjs/intl-utils/lib/src/resolve-locale.js',
-      ];
-      if (thisAsWindowForModules.some((id_) => id.trimEnd().endsWith(id_))) {
-        return 'window';
-      }
-    },
+export default {
+  input: './src/myjdownloader-card.ts',
+  output: {
+    file: './dist/myjdownloader-card.js',
+    format: 'esm',
+    name: 'MyJDownloaderCard',
   },
-];
+  plugins: [...plugins],
+  moduleContext: (id) => {
+    const thisAsWindowForModules = [
+      'node_modules/@formatjs/intl-utils/lib/src/diff.js',
+      'node_modules/@formatjs/intl-utils/lib/src/resolve-locale.js',
+    ];
+    if (thisAsWindowForModules.some((id_) => id.trimEnd().endsWith(id_))) {
+      return 'window';
+    }
+  },
+};

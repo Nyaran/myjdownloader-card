@@ -31,9 +31,9 @@ Or just use [![Open your Home Assistant instance and open a repository inside th
 
 ### Manual method
 
-- Download the [latest release](https://github.com/Nyaran/myjdownloader-card/releases/latest/download/myjdownloader-card.tgz)
-- Extract content.
-- Copy the `myjdownloader-card/dist` folder into `www` folder into your HA installation, as explained in [official documentation](https://developers.home-assistant.io/docs/frontend/custom-ui/registering-resources/)
+- Download the [latest release](https://github.com/Nyaran/myjdownloader-card/releases/latest/download/myjdownloader-card.js)
+- Create a folder named `myjdownloader-card` into `www` folder into your HA installation, as explained in [official documentation](https://developers.home-assistant.io/docs/frontend/custom-ui/registering-resources/)
+- Copy or move the `myjdownloader-card.js` file into that folder 
 - Add the card to the resources in configuration.yaml:
 
 ```

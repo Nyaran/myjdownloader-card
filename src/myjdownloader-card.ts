@@ -5,6 +5,7 @@ import {MyJDownloaderCardConfig} from './types';
 import {CARD_VERSION} from './const';
 import {localize} from './localize/localize';
 import {slugify} from './utils';
+import './editor';
 
 /* eslint no-console: 0 */
 console.info(
@@ -24,7 +25,6 @@ window.customCards.push({
 @customElement('myjdownloader-card')
 export class MyJDownloaderCard extends LitElement {
   public static async getConfigElement(): Promise<LovelaceCardEditor> {
-    await import('./editor');
     return document.createElement('myjdownloader-card-editor');
   }
 
