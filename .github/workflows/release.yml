@@ -1,26 +1,51 @@
 name: Release
 on:
+  workflow_dispatch:
+    inputs:
+      draftRelease:
+        description: 'Draft release: true, false'
+        required: true
+        default: 'true'
+      dryRun:
+        description: 'Dry run: true, false'
+        required: false
+        default: 'false'
+      releaseNotes:
+        description: 'Release notes'
+        required: false
   push:
-    tags:
-      - v*.*.*
+    branches:
+      - main  # adjust this to your default branch
 jobs:
   release:
+    name: Release
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
+      - name: Checkout Repo
         uses: actions/checkout@v4.1.0
+      - name: Setup Node.js
+        uses: actions/setup-node@v5.1.0
+        with:
+          node-version: 16
       - name: Install dependencies
-        run: npm install
-      - name: Run linter
-        run: npm run lint
+        run: npm ci
       - name: Run tests (if present)
         run: npm test --if-present
-      - name: Build
-        run: npm run build
-      - name: Release
-        uses: softprops/action-gh-release@v1
-        if: startsWith(github.ref, 'refs/tags/')
+      - name: Semantic Release
+        id: semantic
+        uses: Actionsflow/action-semantic-release@v2
         with:
-          draft: true
-          generate_release_notes: true
-          files: dist/*.js
+          dry_run: ${{ github.event.inputs.dryRun }}
+          semantic_config: |
+            {
+              "branches": ["main"],
+              "plugins": [
+                ["@semantic-release/commit-analyzer", {"preset": "angular"}],
+                ["@semantic-release/release-notes-generator", {"preset": "angular"}],
+                ["@semantic-release/github", {"draft": ${{ github.event.inputs.draftRelease }}, "releaseNotes": "${{ github.event.inputs.releaseNotes }}"}]
+              ]
+            }
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Echo New Version
+        run: echo 'Publishing version ${{ steps.semantic.outputs.new_release_published }}'
