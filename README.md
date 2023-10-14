@@ -1,6 +1,7 @@
 [![hacs_badge](https://img.shields.io/badge/HACS-Default-orange.svg)](https://github.com/hacs/integration)
 [![GitHub all releases](https://img.shields.io/github/downloads/Nyaran/myjdownloader-card/total)](https://github.com/Nyaran/myjdownloader-card/releases)
 [![GitHub release (latest by SemVer)](https://img.shields.io/github/downloads/Nyaran/myjdownloader-card/latest/total?sort=semver)](https://github.com/Nyaran/myjdownloader-card/releases/latest)
+[![semantic-release: angular](https://img.shields.io/badge/semantic--release-angular-e10079?logo=semantic-release)](https://github.com/semantic-release/semantic-release)
 
 [![Ko-fi](https://img.shields.io/badge/Ko--fi-Nyaran-blue?logo=ko-fi)](https://ko-fi.com/nyaran)
 [![Buy me a coffee](https://img.shields.io/badge/Buy%20me%20a%20coffee-Nyaran-blue?logo=buy-me-a-coffee)](https://www.buymeacoffee.com/nyaran)
