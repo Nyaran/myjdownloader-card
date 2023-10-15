@@ -1,0 +1,83 @@
+name: Create Release PR
+on:
+  workflow_dispatch:
+    inputs:
+      version_increment:
+        description: 'Version Increment Type'
+        type: choice
+        required: true
+        options: ['patch', 'minor', 'major']
+        default: 'patch'
+      draft:
+        description: 'Release as Draft'
+        type: boolean
+        required: false
+        default: true
+
+env:
+  GIT_USER_NAME: 'Luis Zurro de Cos'
+  GIT_USER_EMAIL: '1042532+Nyaran@users.noreply.github.com'
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4.1.0
+        with:
+          persist-credentials: false
+          fetch-depth: 0
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 'lts/*'
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Run linter (if present)
+        run: npm run lint --if-present
+
+      - name: Run tests (if present)
+        run: npm test --if-present
+
+      - name: Bump version
+        run: echo "NEW_VERSION=$(npm version ${{ github.event.inputs.version_increment }} --no-git-tag-version)" >> $GITHUB_ENV
+
+      - name: Setup git
+        run: |
+          git config --global user.name "${{ env.GIT_USER_NAME }}"
+          git config --global user.email "${{ env.GIT_USER_EMAIL }}"
+          git remote set-url origin https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}
+
+      - name: Import GPG key
+        uses: crazy-max/ghaction-import-gpg@v6
+        with:
+          gpg_private_key: ${{ secrets.GPG_PRIVATE_KEY }}
+          passphrase: ${{ secrets.PASSPHRASE }}
+          git_user_signingkey: true
+          git_committer_name: ${{ env.GIT_USER_NAME }}
+          git_committer_email: ${{ env.GIT_USER_EMAIL }}
+
+      - name: Create a new branch
+        run: git checkout -b release/${{ env.NEW_VERSION }}
+
+      - name: Commit changes
+        run: |
+          git config --local user.name "${{ env.GIT_USER_NAME }}"
+          git config --local user.email "${{ env.GIT_USER_EMAIL }}"
+          git config --global commit.gpgsign true
+          git add package.json
+          git commit -S -m "Release ${{ env.NEW_VERSION }}"
+
+      - name: Push changes
+        run: git push origin release/${{ env.NEW_VERSION }}
+
+      - name: Create Pull Request
+        uses: peter-evans/create-pull-request@v5.0.2
+        with:
+          title: "Release ${{ env.NEW_VERSION }}"
+          body: "This is a new release ${{ env.NEW_VERSION }}"
+          branch: "release/${{ env.NEW_VERSION }}"
+          base: "main"
