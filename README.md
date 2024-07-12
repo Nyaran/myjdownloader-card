@@ -38,7 +38,7 @@ Or just use [![Open your Home Assistant instance and open a repository inside th
 
 ```
 resources:
-  - {type: js, url: '/hacsfiles/myjdownloader-card/myjdownloader-card.js'}
+	- {type: js, url: '/hacsfiles/myjdownloader-card/myjdownloader-card.js'}
 ```
 
 - Restart HA
@@ -64,10 +64,10 @@ resources:
 Please find below an example of ui-lovelace.yaml card entry:
 
 ```yaml
-    cards:
-      - type: custom:myjdownloader-card
-        default_instance: 'foo@bar'
-        hide_instance: true
+		cards:
+		- type: custom:myjdownloader-card
+		default_instance: 'foo@bar'
+		hide_instance: true
 ```
 
 ## Preview
