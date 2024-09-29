@@ -9,7 +9,7 @@ import serve from 'rollup-plugin-serve';
 const dev = process.env.ROLLUP_WATCH;
 
 const serveOpts = {
-	contentBase: ['./dist'],
+	contentBase: ['./build'],
 	host: '0.0.0.0',
 	port: '5000',
 	allowCrossOrigin: true,
@@ -35,9 +35,10 @@ const plugins = [
 export default {
 	input: './src/myjdownloader-card.ts',
 	output: {
-		file: './dist/myjdownloader-card.js',
+		file: './build/myjdownloader-card.js',
 		format: 'esm',
 		name: 'MyJDownloaderCard',
+		sourcemap: true,
 	},
 	plugins: [...plugins],
 	moduleContext: (id) => {

@@ -34,7 +34,7 @@
     "stopping": "Stopping",
     "finished": "Finished",
     "running": "Running",
-    "pause": "Paused",
+    "paused": "Paused",
     "idle": "Idle"
   },
   "downloads": {

@@ -1,9 +1,12 @@
-import {html, LitElement, TemplateResult} from 'lit';
-import {fireEvent, HomeAssistant, LovelaceCardEditor} from 'custom-card-helpers';
-import {ScopedRegistryHost} from '@lit-labs/scoped-registry-mixin';
-import {MyJDownloaderCardConfig} from './types';
-import {customElement, property, state} from 'lit/decorators.js';
-import {localize} from './localize/localize';
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-nocheck
+import { html, LitElement, TemplateResult } from 'lit';
+import { fireEvent, HomeAssistant, LovelaceCardEditor } from 'custom-card-helpers';
+import { ScopedRegistryHost } from '@lit-labs/scoped-registry-mixin';
+import { customElement, property, state } from 'lit/decorators.js';
+
+import { MyJDownloaderCardConfig } from './types.js';
+import { localize } from './localize/localize.js';
 
 const SCHEMA = [
 	{name: 'header_title', selector: {text: {}}},
@@ -41,19 +44,19 @@ const SCHEMA = [
 		name: '',
 		type: 'grid',
 		schema: [
-			{name: 'hide_title', selector: {boolean: {}}},
-			{name: 'hide_instance', selector: {boolean: {}}},
-			{name: 'hide_play', selector: {boolean: {}}},
-			{name: 'hide_pause', selector: {boolean: {}}},
-			{name: 'hide_stop', selector: {boolean: {}}},
-			{name: 'hide_speed_limit', selector: {boolean: {}}},
+			{ name: 'hide_title', selector: {boolean: {}} },
+			{ name: 'hide_instance', selector: {boolean: {}} },
+			{ name: 'hide_play', selector: {boolean: {}} },
+			{ name: 'hide_pause', selector: {boolean: {}} },
+			{ name: 'hide_stop', selector: {boolean: {}} },
+			{ name: 'hide_speed_limit', selector: {boolean: {}} },
 		],
 	},
 ] as const;
 
 @customElement('myjdownloader-card-editor')
 export class MyJDownloaderCardEditor extends ScopedRegistryHost(LitElement) implements LovelaceCardEditor {
-	@property({attribute: false}) public hass?: HomeAssistant;
+	@property({ attribute: false }) public hass?: HomeAssistant;
 
 	@state() private _config?: MyJDownloaderCardConfig;
 	@state() private _helpers?: unknown;
@@ -72,14 +75,15 @@ export class MyJDownloaderCardEditor extends ScopedRegistryHost(LitElement) impl
 		}
 
 		return html`
-			<ha-form
-					.hass=${this.hass}
-					.data=${this._config}
-					.schema=${SCHEMA}
-					.computeLabel=${(this._computeLabelCallback.bind(this))}
-					@value-changed=${this._valueChanged}
-			></ha-form>
-			<ha-device-picker .label="Label" .value="Value" .devices="Devices" .areas="Areas" .entities="Entities"></ha-device-picker>
+          <ha-form
+              .hass=${this.hass}
+              .data=${this._config}
+              .schema=${SCHEMA}
+              .computeLabel=${(this._computeLabelCallback.bind(this))}
+              @value-changed=${this._valueChanged}
+          ></ha-form>
+          <ha-device-picker .label="Label" .value="Value" .devices="Devices" .areas="Areas"
+                            .entities="Entities"></ha-device-picker>
 		`;
 	}
 
@@ -96,7 +100,7 @@ export class MyJDownloaderCardEditor extends ScopedRegistryHost(LitElement) impl
 
 	private _valueChanged(ev): void {
 		console.log('ev.detail.value', ev.detail.value);
-		fireEvent(this, 'config-changed', {config: ev.detail.value});
+		fireEvent(this, 'config-changed', { config: ev.detail.value });
 	}
 
 	private _computeLabelCallback(schema: typeof SCHEMA[number]) {

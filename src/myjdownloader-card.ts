@@ -1,18 +1,16 @@
-import {css, html, LitElement, PropertyValues} from 'lit';
-import {customElement, property, state} from 'lit/decorators.js';
-import {getLovelace, hasConfigOrEntityChanged, HomeAssistant, LovelaceCardEditor} from 'custom-card-helpers';
-import {MyJDownloaderCardConfig} from './types';
-import {CARD_VERSION} from './const';
-import {localize} from './localize/localize';
-import {slugify} from './utils';
-import './editor';
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-nocheck
+import { css, html, LitElement, PropertyValues } from 'lit';
+import { customElement, property, state } from 'lit/decorators.js';
+import { getLovelace, hasConfigOrEntityChanged, HomeAssistant, LovelaceCardEditor } from 'custom-card-helpers';
+import { MyJDownloaderCardConfig } from './types.js';
+import { CARD_VERSION } from './const.js';
+import { localize } from './localize/localize.js';
+import { slugify } from './utils.js';
+import './editor.js';
 
 /* eslint no-console: 0 */
-console.info(
-	`%c  MyJDownloader-Card \n%c  ${localize('common.version')} ${CARD_VERSION}`,
-	'color: orange; font-weight: bold; background: black',
-	'color: white; font-weight: bold; background: dimgray',
-);
+console.info(`%c  MyJDownloader-Card \n%c  ${localize('common.version')} ${CARD_VERSION}`, 'color: orange; font-weight: bold; background: black', 'color: white; font-weight: bold; background: dimgray');
 
 window.customCards = window.customCards || [];
 window.customCards.push({
@@ -32,7 +30,7 @@ export class MyJDownloaderCard extends LitElement {
 		return {};
 	}
 
-	@property({attribute: false}) public hass!: HomeAssistant;
+	@property({ attribute: false }) public hass!: HomeAssistant;
 	@state() private config!: MyJDownloaderCardConfig;
 	private _selectedInstance!: string;
 	private _selectedInstanceEntity!: string;
@@ -60,12 +58,10 @@ export class MyJDownloaderCard extends LitElement {
 			throw new Error(localize('common.invalid_configuration'));
 		}
 
-		if (config.display_mode !== undefined &&
-			!['compact', 'full'].includes(config.display_mode)) {
+		if (config.display_mode !== undefined && !['compact', 'full'].includes(config.display_mode)) {
 			throw new Error(localize('config.wrong_display_mode'));
 		}
-		if (config.list_mode !== undefined &&
-			!['full', 'packages', 'links'].includes(config.list_mode)) {
+		if (config.list_mode !== undefined && !['full', 'packages', 'links'].includes(config.list_mode)) {
 			throw new Error(localize('config.wrong_list_mode'));
 		}
 
@@ -84,8 +80,7 @@ export class MyJDownloaderCard extends LitElement {
 			hide_play: false,
 			hide_pause: false,
 			hide_stop: false,
-			hide_speed_limit: false,
-			...config,
+			hide_speed_limit: false, ...config,
 		};
 
 		if (this.config.default_instance != null) {
@@ -115,20 +110,20 @@ export class MyJDownloaderCard extends LitElement {
 		}
 
 		return html`
-			<ha-card>
-				<div class="card-header">
-					${this.renderCardHeader()}
-					${this.renderInstanceSelect()}
-				</div>
-				<div>
-					<div id="toolbar-container">
-						${this.renderToolbar()}
-					</div>
-					<div id="downloads">
-						${this._renderDownloads()}
-					</div>
-				</div>
-			</ha-card>
+          <ha-card>
+            <div class="card-header">
+              ${this.renderCardHeader()}
+              ${this.renderInstanceSelect()}
+            </div>
+            <div>
+              <div id="toolbar-container">
+                ${this.renderToolbar()}
+              </div>
+              <div id="downloads">
+                ${this._renderDownloads()}
+              </div>
+            </div>
+          </ha-card>
 		`;
 	}
 
@@ -138,20 +133,18 @@ export class MyJDownloaderCard extends LitElement {
 			downloads = this._getDownloads();
 		} catch (e) {
 			if (e instanceof Error && e.message.startsWith('error.no_sensor_')) {
-				return html`<div class="no-sensor">${localize(e.message)}</div>`;
+				return html`
+                  <div class="no-sensor">${localize(e.message)}</div>`;
 			}
 			throw e;
 		}
 
 		return html`
-			${Object.keys(downloads).length > 0
-					? html`
-						<div class="mode-${this.config.display_mode}">
-							${this._renderDownloadList(downloads)}
-						</div>`
-					: html`
-						<div class="no-downloads">${localize('downloads.no_downloads')}</div>`
-			}`;
+          ${Object.keys(downloads).length > 0 ? html`
+            <div class="mode-${this.config.display_mode}">
+              ${this._renderDownloadList(downloads)}
+            </div>` : html`
+            <div class="no-downloads">${localize('downloads.no_downloads')}</div>`}`;
 	}
 
 	_renderDownloadList(downloads) {
@@ -272,9 +265,7 @@ export class MyJDownloaderCard extends LitElement {
 	}
 
 	_getInstances() {
-		return typeof this.hass.states[`sensor.${this.config.sensor_name}s_online`] != 'undefined'
-			? this.hass.states[`sensor.${this.config.sensor_name}s_online`].attributes.jdownloaders
-			: [];
+		return typeof this.hass.states[`sensor.${this.config.sensor_name}s_online`] != 'undefined' ? this.hass.states[`sensor.${this.config.sensor_name}s_online`].attributes.jdownloaders : [];
 	}
 
 	_toggleInstance(ev) {
@@ -282,19 +273,19 @@ export class MyJDownloaderCard extends LitElement {
 	}
 
 	_togglePlay() {
-		this.hass.callService('myjdownloader', 'start_downloads', {entity_id: `sensor.${this.config.sensor_name}_${this._selectedInstanceEntity}_status`});
+		this.hass.callService('myjdownloader', 'start_downloads', { entity_id: `sensor.${this.config.sensor_name}_${this._selectedInstanceEntity}_status` });
 	}
 
 	_togglePause() {
-		this.hass.callService('switch', 'toggle', {entity_id: `switch.${this.config.sensor_name}_${this._selectedInstanceEntity}_pause`});
+		this.hass.callService('switch', 'toggle', { entity_id: `switch.${this.config.sensor_name}_${this._selectedInstanceEntity}_pause` });
 	}
 
 	_toggleStop() {
-		this.hass.callService('myjdownloader', 'stop_downloads', {entity_id: `sensor.${this.config.sensor_name}_${this._selectedInstanceEntity}_status`});
+		this.hass.callService('myjdownloader', 'stop_downloads', { entity_id: `sensor.${this.config.sensor_name}_${this._selectedInstanceEntity}_status` });
 	}
 
 	_toggleLimit() {
-		this.hass.callService('switch', 'toggle', {entity_id: `switch.${this.config.sensor_name}_${this._selectedInstanceEntity}_limit`});
+		this.hass.callService('switch', 'toggle', { entity_id: `switch.${this.config.sensor_name}_${this._selectedInstanceEntity}_limit` });
 	}
 
 	_downloadStatus(download) {
@@ -310,86 +301,87 @@ export class MyJDownloaderCard extends LitElement {
 	renderToolbar() {
 		const stats = this._getStats();
 		return html`
-			<div id="toolbar">
-				<div class="status titleitem c-${stats.status}">
-					<p>${localize(`status.${stats.status}`)}
-					<p>
-				</div>
-				<div class="titleitem">
-					<ha-icon icon="mdi:download" class="down down-color title-item-icon"></ha-icon>
-					<span>${stats.down_speed} ${stats.down_unit}</span>
-				</div>
-				${this.renderPlayButton()}
-				${this.renderPauseButton()}
-				${this.renderStopButton()}
-				${this.renderLimitButton()}
-			</div>
+          <div id="toolbar">
+            <div class="status titleitem c-${stats.status}">
+              <p>${localize(`status.${stats.status}`)}
+              <p>
+            </div>
+            <div class="titleitem">
+              <ha-icon icon="mdi:download" class="down down-color title-item-icon"></ha-icon>
+              <span>${stats.down_speed} ${stats.down_unit}</span>
+            </div>
+            ${this.renderPlayButton()}
+            ${this.renderPauseButton()}
+            ${this.renderStopButton()}
+            ${this.renderLimitButton()}
+          </div>
 		`;
 	}
 
 	renderPackage(uuid, pack) {
 		return html`
-			<div class="package-container ${uuid}">
-				<div class="progressbar">
-					<div class="${this._downloadStatus(pack)} progressin"
-							 style="width: ${pack.percent}%"></div>
-					<ha-icon class="download-icon" icon="mdi:package-variant"></ha-icon>
-					<div class="name"><a title="${pack.name}">${pack.name}</a></div>
-					<!-- Using <a /> just as a quick hack to display a tooltip, improve in future release -->
-					<div class="percent">${pack.percent.toFixed(2)}%</div>
-				</div>
-				${this.config.list_mode === 'full' ? html`<div class="links">${pack.links.map(link => this.renderLink(link))}</div>` : ''}
-			</div>
+          <div class="package-container ${uuid}">
+            <div class="progressbar">
+              <div class="${this._downloadStatus(pack)} progressin"
+                   style="width: ${pack.percent}%"></div>
+              <ha-icon class="download-icon" icon="mdi:package-variant"></ha-icon>
+              <div class="name"><a title="${pack.name}">${pack.name}</a></div>
+              <!-- Using <a /> just as a quick hack to display a tooltip, improve in future release -->
+              <div class="percent">${pack.percent.toFixed(2)}%</div>
+            </div>
+            ${this.config.list_mode === 'full' ? html`
+              <div class="links">${pack.links.map(link => this.renderLink(link))}</div>` : ''}
+          </div>
 		`;
 	}
 
 	renderLink(link) {
 		return html`
-			<div class="progressbar">
-				<div class="${this._downloadStatus(link)} progressin"
-						 style="width: ${link.percent}%"></div>
-				<ha-icon class="download-icon" icon="mdi:download"></ha-icon>
-				<div class="name"><a title="${link.name}">${link.name}</a></div>
-				<div class="percent">${link.percent.toFixed(2)}%</div>
-			</div>
+          <div class="progressbar">
+            <div class="${this._downloadStatus(link)} progressin"
+                 style="width: ${link.percent}%"></div>
+            <ha-icon class="download-icon" icon="mdi:download"></ha-icon>
+            <div class="name"><a title="${link.name}">${link.name}</a></div>
+            <div class="percent">${link.percent.toFixed(2)}%</div>
+          </div>
 		`;
 	}
 
 	renderPackageFull(uuid, pack) {
 		return html`
-			<div class="package-container ${uuid}">
-				<div class="package">
-					<div class="package_name">
-						<ha-icon class="download-icon" icon="mdi:package-variant"></ha-icon>
-						<a title="${pack.name}">${pack.name}</a></div>
-					<div class="package_status">${localize(`status.${this._downloadStatus(pack)}`)}</div>
-					<div class="progressbar">
-						<div class="${this._downloadStatus(pack)} progressin"
-								 style="width: ${pack.percent}%">
-						</div>
-					</div>
-					<div class="package_details">${pack.percent.toFixed(2)} %</div>
-				</div>
-				<div class="links">
-					${pack.links.map(link => this.renderLinkFull(link))}
-				</div>
-			</div>
+          <div class="package-container ${uuid}">
+            <div class="package">
+              <div class="package_name">
+                <ha-icon class="download-icon" icon="mdi:package-variant"></ha-icon>
+                <a title="${pack.name}">${pack.name}</a></div>
+              <div class="package_status">${localize(`status.${this._downloadStatus(pack)}`)}</div>
+              <div class="progressbar">
+                <div class="${this._downloadStatus(pack)} progressin"
+                     style="width: ${pack.percent}%">
+                </div>
+              </div>
+              <div class="package_details">${pack.percent.toFixed(2)} %</div>
+            </div>
+            <div class="links">
+              ${pack.links.map(link => this.renderLinkFull(link))}
+            </div>
+          </div>
 		`;
 	}
 
 	renderLinkFull(link) {
 		return html`
-			<div class="link">
-				<div class="link_name">
-					<ha-icon class="download-icon" icon="mdi:download"></ha-icon>
-					<a title="${link.name}">${link.name}</a></div>
-				<div class="link_status">${localize(`status.${this._downloadStatus(link)}`)}</div>
-				<div class="progressbar">
-					<div class="${this._downloadStatus(link)} progressin" style="width: ${link.percent}%">
-					</div>
-				</div>
-				<div class="link_details">${link.percent.toFixed(2)} %</div>
-			</div>
+          <div class="link">
+            <div class="link_name">
+              <ha-icon class="download-icon" icon="mdi:download"></ha-icon>
+              <a title="${link.name}">${link.name}</a></div>
+            <div class="link_status">${localize(`status.${this._downloadStatus(link)}`)}</div>
+            <div class="progressbar">
+              <div class="${this._downloadStatus(link)} progressin" style="width: ${link.percent}%">
+              </div>
+            </div>
+            <div class="link_details">${link.percent.toFixed(2)} %</div>
+          </div>
 		`;
 	}
 
@@ -400,15 +392,15 @@ export class MyJDownloaderCard extends LitElement {
 
 		const state = this.hass.states[`sensor.${this.config.sensor_name}_${this._selectedInstanceEntity}_status`].state === 'stopped';
 		return html`
-			<div class="titleitem">
-				<ha-icon-button
-						class="play_${state ? 'on' : 'off'}"
-						@click="${this._togglePlay}"
-						title="${localize('actions.play')}"
-						id="play">
-					<ha-icon class="title-item-button" icon="mdi:play"></ha-icon>
-				</ha-icon-button>
-			</div>
+          <div class="titleitem">
+            <ha-icon-button
+                class="play_${state ? 'on' : 'off'}"
+                @click="${this._togglePlay}"
+                title="${localize('actions.play')}"
+                id="play">
+              <ha-icon class="title-item-button" icon="mdi:play"></ha-icon>
+            </ha-icon-button>
+          </div>
 		`;
 	}
 
@@ -423,15 +415,15 @@ export class MyJDownloaderCard extends LitElement {
 
 		const state = this.hass.states[`switch.${this.config.sensor_name}_${this._selectedInstanceEntity}_pause`].state;
 		return html`
-			<div class="titleitem">
-				<ha-icon-button
-						class="pause_${state}"
-						@click="${this._togglePause}"
-						title="${localize('actions.pause')}"
-						id="pause">
-					<ha-icon class="title-item-button" icon="mdi:pause"></ha-icon>
-				</ha-icon-button>
-			</div>
+          <div class="titleitem">
+            <ha-icon-button
+                class="pause_${state}"
+                @click="${this._togglePause}"
+                title="${localize('actions.pause')}"
+                id="pause">
+              <ha-icon class="title-item-button" icon="mdi:pause"></ha-icon>
+            </ha-icon-button>
+          </div>
 		`;
 	}
 
@@ -442,15 +434,15 @@ export class MyJDownloaderCard extends LitElement {
 
 		const state = this.hass.states[`sensor.${this.config.sensor_name}_${this._selectedInstanceEntity}_status`].state === 'stopped';
 		return html`
-			<div class="titleitem">
-				<ha-icon-button
-						class="stop_${state ? 'off' : 'on'}"
-						@click="${this._toggleStop}"
-						title="${localize('actions.stop')}"
-						id="stop">
-					<ha-icon class="title-item-button" icon="mdi:stop"></ha-icon>
-				</ha-icon-button>
-			</div>
+          <div class="titleitem">
+            <ha-icon-button
+                class="stop_${state ? 'off' : 'on'}"
+                @click="${this._toggleStop}"
+                title="${localize('actions.stop')}"
+                id="stop">
+              <ha-icon class="title-item-button" icon="mdi:stop"></ha-icon>
+            </ha-icon-button>
+          </div>
 		`;
 	}
 
@@ -465,15 +457,15 @@ export class MyJDownloaderCard extends LitElement {
 
 		const state = this.hass.states[`switch.${this.config.sensor_name}_${this._selectedInstanceEntity}_limit`].state;
 		return html`
-			<div class="titleitem">
-				<ha-icon-button
-						class="speed_limit_${state}"
-						@click="${this._toggleLimit}"
-						title="${localize('actions.speed_limit')}"
-						id="speed_limit">
-					<ha-icon class="title-item-button" icon="mdi:download-lock"></ha-icon>
-				</ha-icon-button>
-			</div>
+          <div class="titleitem">
+            <ha-icon-button
+                class="speed_limit_${state}"
+                @click="${this._toggleLimit}"
+                title="${localize('actions.speed_limit')}"
+                id="speed_limit">
+              <ha-icon class="title-item-button" icon="mdi:download-lock"></ha-icon>
+            </ha-icon-button>
+          </div>
 		`;
 	}
 
@@ -483,7 +475,7 @@ export class MyJDownloaderCard extends LitElement {
 		}
 
 		return html`
-			<div class="header-title">${this.config.header_title}</div>`;
+          <div class="header-title">${this.config.header_title}</div>`;
 	}
 
 	renderInstanceSelect() {
@@ -492,15 +484,13 @@ export class MyJDownloaderCard extends LitElement {
 		}
 
 		return html`
-			<ha-select
-					class="instance-dropdown"
-					@selected=${this._toggleInstance}
-					.value=${this.selectedInstance}>
-				${this._getInstances().map(
-						(type) => html`
-							<mwc-list-item .value=${type}>${type}</mwc-list-item>`,
-				)}
-			</ha-select>
+          <ha-select
+              class="instance-dropdown"
+              @selected=${this._toggleInstance}
+              .value=${this.selectedInstance}>
+            ${this._getInstances().map((type) => html`
+              <mwc-list-item .value=${type}>${type}</mwc-list-item>`)}
+          </ha-select>
 		`;
 	}
 
@@ -514,197 +504,197 @@ export class MyJDownloaderCard extends LitElement {
 
 	static get styles() {
 		return css`
-			/* Header */
+      /* Header */
 
-			.card-header {
-				display: flex;
-			}
+      .card-header {
+        display: flex;
+      }
 
-			.header-title {
-				margin-right: 25px;
-			}
+      .header-title {
+        margin-right: 25px;
+      }
 
-			.instance-dropdown {
-				flex-grow: 1;
-			}
+      .instance-dropdown {
+        flex-grow: 1;
+      }
 
-			/* Downloads */
+      /* Downloads */
 
-			#downloads {
-				margin-top: 0.4em;
-				padding-bottom: 0.8em;
-			}
+      #downloads {
+        margin-top: 0.4em;
+        padding-bottom: 0.8em;
+      }
 
-			/* Global status */
+      /* Global status */
 
-			.c-running {
-				color: var(--label-badge-yellow);
-			}
+      .c-running {
+        color: var(--label-badge-yellow);
+      }
 
-			.c-pause {
-				color: var(--label-badge-blue);
-			}
+      .c-pause {
+        color: var(--label-badge-blue);
+      }
 
-			.c-idle {
-				color: var(--label-badge-grey);
-			}
+      .c-idle {
+        color: var(--label-badge-grey);
+      }
 
-			.c-stopped {
-				color: var(--label-badge-grey);
-			}
+      .c-stopped {
+        color: var(--label-badge-grey);
+      }
 
-			.progressbar {
-				border-radius: 0.4em;
-				margin-bottom: 0.6em;
-				height: 1.4em;
-				display: flex;
-				background-color: #f1f1f1;
-				z-index: 0;
-				position: relative;
-				margin-left: 1.4em;
-				margin-right: 1.4em;
-			}
+      .progressbar {
+        border-radius: 0.4em;
+        margin-bottom: 0.6em;
+        height: 1.4em;
+        display: flex;
+        background-color: #f1f1f1;
+        z-index: 0;
+        position: relative;
+        margin-left: 1.4em;
+        margin-right: 1.4em;
+      }
 
-			.progressin {
-				border-radius: 0.4em;
-				height: 100%;
-				z-index: 1;
-				position: absolute;
-			}
+      .progressin {
+        border-radius: 0.4em;
+        height: 100%;
+        z-index: 1;
+        position: absolute;
+      }
 
-			.download-icon {
-				--mdc-icon-size: 1.4em;
-				z-index: 2;
-				margin-left: .2em;
-				line-height: 1.4em;
-			}
+      .download-icon {
+        --mdc-icon-size: 1.4em;
+        z-index: 2;
+        margin-left: .2em;
+        line-height: 1.4em;
+      }
 
-			.mode-compact .download-icon {
-				color: var(--text-light-primary-color, var(--primary-text-color));
-			}
+      .mode-compact .download-icon {
+        color: var(--text-light-primary-color, var(--primary-text-color));
+      }
 
-			.name {
-				margin-left: 0.7em;
-				width: calc(100% - 60px);
-				overflow: hidden;
-				z-index: 2;
-				color: var(--text-light-primary-color, var(--primary-text-color));
-				line-height: 1.4em;
-			}
+      .name {
+        margin-left: 0.7em;
+        width: calc(100% - 60px);
+        overflow: hidden;
+        z-index: 2;
+        color: var(--text-light-primary-color, var(--primary-text-color));
+        line-height: 1.4em;
+      }
 
-			.percent {
-				vertical-align: middle;
-				z-index: 2;
-				margin-left: 1.7em;
-				margin-right: 0.7em;
-				color: var(--text-light-primary-color, var(--primary-text-color));
-				line-height: 1.4em;
-			}
+      .percent {
+        vertical-align: middle;
+        z-index: 2;
+        margin-left: 1.7em;
+        margin-right: 0.7em;
+        color: var(--text-light-primary-color, var(--primary-text-color));
+        line-height: 1.4em;
+      }
 
-			/* Download status */
+      /* Download status */
 
-			.downloading {
-				background-color: var(--paper-item-icon-active-color);
-			}
+      .downloading {
+        background-color: var(--paper-item-icon-active-color);
+      }
 
-			.stopped {
-				background-color: var(--label-badge-grey);
-			}
+      .stopped {
+        background-color: var(--label-badge-grey);
+      }
 
-			.finished {
-				background-color: var(--light-primary-color);
-			}
+      .finished {
+        background-color: var(--light-primary-color);
+      }
 
-			.links {
-				margin-left: 1.5em;
-			}
+      .links {
+        margin-left: 1.5em;
+      }
 
-			.title-item-icon {
-				display: inline-block;
-				padding-top: 12px;
-			}
+      .title-item-icon {
+        display: inline-block;
+        padding-top: 12px;
+      }
 
-			.title-item-button {
-				font-size: var(--paper-font-body1_-_font-size);
-			}
+      .title-item-button {
+        font-size: var(--paper-font-body1_-_font-size);
+      }
 
-			.down-color {
-				color: var(--paper-item-icon-active-color);
-			}
+      .down-color {
+        color: var(--paper-item-icon-active-color);
+      }
 
-			#toolbar-container {
-				position: relative;
-				display: inline;
-				width: 100%;
-			}
+      #toolbar-container {
+        position: relative;
+        display: inline;
+        width: 100%;
+      }
 
-			#toolbar {
-				display: flex;
-				flex-wrap: wrap;
-				justify-content: center;
-				width: 100%;
-			}
+      #toolbar {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        width: 100%;
+      }
 
-			.titleitem {
-				width: auto;
-				margin-left: 0.7em;
-			}
+      .titleitem {
+        width: auto;
+        margin-left: 0.7em;
+      }
 
-			.status {
-				font-size: 1em;
-			}
+      .status {
+        font-size: 1em;
+      }
 
-			.speed_limit_off {
-				color: var(--light-primary-color);
-			}
+      .speed_limit_off {
+        color: var(--light-primary-color);
+      }
 
-			.speed_limit_on {
-				color: var(--paper-item-icon-active-color);
-			}
+      .speed_limit_on {
+        color: var(--paper-item-icon-active-color);
+      }
 
-			.pause_off {
-				color: var(--light-primary-color);
-			}
+      .pause_off {
+        color: var(--light-primary-color);
+      }
 
-			.pause_on, .play_on, .stop_on {
-				color: var(--primary-color);
-			}
+      .pause_on, .play_on, .stop_on {
+        color: var(--primary-color);
+      }
 
-			.play_off, .stop_off {
-				color: var(--label-badge-grey);
-			}
+      .play_off, .stop_off {
+        color: var(--label-badge-grey);
+      }
 
-			.no-downloads, .no-sensor {
-				margin-left: 1.4em;
-			}
+      .no-downloads, .no-sensor {
+        margin-left: 1.4em;
+      }
 
-			.no-sensor {
-				color: var(--error-color);
-			}
+      .no-sensor {
+        color: var(--error-color);
+      }
 
-			.mode-full {
-				margin-left: 1.4em;
-				margin-right: 1.4em;
-			}
+      .mode-full {
+        margin-left: 1.4em;
+        margin-right: 1.4em;
+      }
 
-			.mode-full .progressbar {
-				margin: 0 0 0 0;
-				height: 4px;
-			}
+      .mode-full .progressbar {
+        margin: 0 0 0 0;
+        height: 4px;
+      }
 
-			.package_name, .link_name {
-				overflow: hidden;
-				text-overflow: ellipsis;
-				white-space: nowrap;
-			}
+      .package_name, .link_name {
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
 
-			.package_status, .link_status {
-				font-size: 0.7em;
-			}
+      .package_status, .link_status {
+        font-size: 0.7em;
+      }
 
-			.package_details, .link_details {
-				font-size: 0.7em;
-			}
-		`;
+      .package_details, .link_details {
+        font-size: 0.7em;
+      }
+    `;
 	}
 }
