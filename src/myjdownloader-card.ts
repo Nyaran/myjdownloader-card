@@ -7,7 +7,7 @@ import { localize } from './localize/localize.js';
 import { slugify } from './utils.js';
 import './editor.js';
 
-/* eslint no-console: 0 */
+// eslint-disable-next-line no-console
 console.info(`%c  MyJDownloader-Card \n%c  ${localize('common.version')} ${CARD_VERSION}`, 'color: orange; font-weight: bold; background: black', 'color: white; font-weight: bold; background: dimgray');
 
 window.customCards = window.customCards || [];
@@ -20,7 +20,7 @@ window.customCards.push({
 
 @customElement('myjdownloader-card')
 export class MyJDownloaderCard extends LitElement {
-	public static async getConfigElement(): Promise<LovelaceCardEditor> {
+	public static getConfigElement(): LovelaceCardEditor {
 		return document.createElement('myjdownloader-card-editor');
 	}
 
@@ -64,7 +64,7 @@ export class MyJDownloaderCard extends LitElement {
 		}
 
 		if (config.test_gui) {
-			getLovelace().setEditMode(true);
+			getLovelace().setEditMode(true); // eslint-disable-line @typescript-eslint/no-unsafe-call
 		}
 
 		this.config = {
@@ -149,18 +149,17 @@ export class MyJDownloaderCard extends LitElement {
 		let renderPackageMethod, renderLinkMethod;
 
 		if (this.config.display_mode === 'compact') {
-			renderPackageMethod = this.renderPackage;
-			renderLinkMethod = this.renderDownloadLink;
+			renderPackageMethod = this.renderPackage.bind(this);
+			renderLinkMethod = this.renderDownloadLink.bind(this);
 		} else {
-			renderPackageMethod = this.renderPackageFull;
-			renderLinkMethod = this.renderDownloadLinkFull;
+			renderPackageMethod = this.renderPackageFull.bind(this);
+			renderLinkMethod = this.renderDownloadLinkFull.bind(this);
 		}
 
 		if (['full', 'packages'].includes(this.config.list_mode as string)) {
-			return Object.entries(downloads).map(([uuid, pack]) => renderPackageMethod.bind(this)(parseInt(uuid), pack as Package));
-		} else {
-			return Object.values(downloads).map(downloadLink => renderLinkMethod.bind(this)(downloadLink as DownloadLink));
+			return Object.entries(downloads).map(([uuid, pack]) => renderPackageMethod(parseInt(uuid), pack as Package));
 		}
+		return Object.values(downloads).map(downloadLink => renderLinkMethod(downloadLink as DownloadLink));
 	}
 
 	_buildPackage(pack: Package) {
@@ -183,14 +182,12 @@ export class MyJDownloaderCard extends LitElement {
 			speed: pack.speed,
 			status: pack.status,
 			statusIconKey: pack.statusIconKey,
-			// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-			// @ts-expect-error
-			links: [],
+			uuid: pack.uuid,
+			links: [] as DownloadLink[],
 		};
 	}
 
 	_buildDownloadLink(downloadLink: DownloadLink) {
-		console.log('_buildDownloadLink - DownloadLink', downloadLink);
 		return {
 			addedDate: downloadLink.addedDate,
 			bytesLoaded: downloadLink.bytesLoaded,
@@ -218,36 +215,30 @@ export class MyJDownloaderCard extends LitElement {
 	}
 
 	_getDownloads() {
-		const downloads = {};
+		const downloads = {} as Downloads;
 
 		if (['full', 'packages'].includes(this.config.list_mode as string)) {
-			if (typeof this.hass.states[`sensor.${this.config.sensor_name}_${this.selectedInstanceEntity}_packages`] == 'undefined') {
+			if (typeof this.hass.states[`sensor.${this.config.sensor_name}_${this.selectedInstanceEntity}_packages`] === 'undefined') {
 				throw new Error('error.no_sensor_packages');
 			} else {
-				const {packages} = this.hass.states[`sensor.${this.config.sensor_name}_${this.selectedInstanceEntity}_packages`].attributes;
+				const packages = this.hass.states[`sensor.${this.config.sensor_name}_${this.selectedInstanceEntity}_packages`].attributes.packages as Package[];
 				packages.forEach((pack: Package) => {
-					// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-					// @ts-expect-error
 					downloads[pack.uuid] = this._buildPackage(pack);
 				});
 			}
 		}
 
 		if (['full', 'links'].includes(this.config.list_mode as string)) {
-			if (typeof this.hass.states[`sensor.${this.config.sensor_name}_${this.selectedInstanceEntity}_links`] == 'undefined') {
+			if (typeof this.hass.states[`sensor.${this.config.sensor_name}_${this.selectedInstanceEntity}_links`] === 'undefined') {
 				throw new Error('error.no_sensor_links');
 			} else {
-				const links = this.hass.states[`sensor.${this.config.sensor_name}_${this.selectedInstanceEntity}_links`].attributes['links'];
+				const links = this.hass.states[`sensor.${this.config.sensor_name}_${this.selectedInstanceEntity}_links`].attributes.links as DownloadLink[];
 				links.forEach((link: DownloadLink) => {
 					const linkData = this._buildDownloadLink(link);
 
 					if (this.config.list_mode === 'full') {
-						// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-						// @ts-expect-error
-						downloads[link.packageUUID].links.push(linkData);
+						(downloads[link.packageUUID] as Package).links.push(linkData);
 					} else {
-						// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-						// @ts-expect-error
 						downloads[link.uuid] = linkData;
 					}
 				});
@@ -258,12 +249,12 @@ export class MyJDownloaderCard extends LitElement {
 	}
 
 	_getStats() {
-		const sensor_prefix = `sensor.${this.config.sensor_name}_${this._selectedInstanceEntity}`;
-		if (typeof this.hass.states[`${sensor_prefix}_download_speed`] != 'undefined') {
+		const sensorPrefix = `sensor.${this.config.sensor_name}_${this._selectedInstanceEntity}`;
+		if (typeof this.hass.states[`${sensorPrefix}_download_speed`] !== 'undefined') {
 			return {
-				down_speed: this.hass.states[`${sensor_prefix}_download_speed`].state,
-				down_unit: this.hass.states[`${sensor_prefix}_download_speed`].attributes.unit_of_measurement,
-				status: this.hass.states[`${sensor_prefix}_status`].state,
+				down_speed: this.hass.states[`${sensorPrefix}_download_speed`].state as string,
+				down_unit: this.hass.states[`${sensorPrefix}_download_speed`].attributes.unit_of_measurement as string,
+				status: this.hass.states[`${sensorPrefix}_status`].state as string,
 			};
 		}
 		return {
@@ -274,13 +265,11 @@ export class MyJDownloaderCard extends LitElement {
 	}
 
 	_getInstances(): string[] {
-		return typeof this.hass.states[`sensor.${this.config.sensor_name}s_online`] != 'undefined' ? this.hass.states[`sensor.${this.config.sensor_name}s_online`].attributes.jdownloaders : [];
+		return (typeof this.hass.states[`sensor.${this.config.sensor_name}s_online`] !== 'undefined' ? this.hass.states[`sensor.${this.config.sensor_name}s_online`].attributes.jdownloaders : []) as string[];
 	}
 
 	_toggleInstance(ev: CustomEvent) {
-		// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-		// @ts-expect-error
-		this.selectedInstance = ev.target.value;
+		this.selectedInstance = (ev.target as HTMLSelectElement).value;
 	}
 
 	async _togglePlay() {
@@ -304,9 +293,8 @@ export class MyJDownloaderCard extends LitElement {
 			return 'finished';
 		} else if (downloadItem.enabled) {
 			return 'downloading';
-		} else {
-			return 'stopped';
 		}
+		return 'stopped';
 	}
 
 	renderToolbar() {
@@ -330,7 +318,6 @@ export class MyJDownloaderCard extends LitElement {
 	}
 
 	renderPackage(uuid: number, pack: Package) {
-		console.log('renderPackage - Package', pack);
 		return html`
           <div class="package-container ${uuid}">
             <div class="progressbar">
@@ -348,8 +335,6 @@ export class MyJDownloaderCard extends LitElement {
 	}
 
 	renderDownloadLink(downloadLink: DownloadLink) {
-		console.log('renderDownloadLink - DownloadLink', downloadLink);
-
 		return html`
           <div class="progressbar">
             <div class="${this._downloadStatus(downloadLink)} progressin"
@@ -362,8 +347,6 @@ export class MyJDownloaderCard extends LitElement {
 	}
 
 	renderPackageFull(uuid: number, pack: Package) {
-		console.log('renderPackageFull - Package', pack);
-
 		return html`
           <div class="package-container ${uuid}">
             <div class="package">
@@ -386,8 +369,6 @@ export class MyJDownloaderCard extends LitElement {
 	}
 
 	renderDownloadLinkFull(downloadLink: DownloadLink) {
-		console.log('renderDownloadLinkFull - DownloadLink', downloadLink);
-
 		return html`
           <div class="link">
             <div class="link_name">
@@ -413,7 +394,7 @@ export class MyJDownloaderCard extends LitElement {
           <div class="titleitem">
             <ha-icon-button
                 class="play_${state ? 'on' : 'off'}"
-                @click="${this._togglePlay}"
+                @click="${this._togglePlay.bind(this)}"
                 title="${localize('actions.play')}"
                 id="play">
               <ha-icon class="title-item-button" icon="mdi:play"></ha-icon>
@@ -427,16 +408,16 @@ export class MyJDownloaderCard extends LitElement {
 			return html``;
 		}
 
-		if (typeof this.hass.states[`switch.${this.config.sensor_name}_${this._selectedInstanceEntity}_pause`] == 'undefined') {
+		if (typeof this.hass.states[`switch.${this.config.sensor_name}_${this._selectedInstanceEntity}_pause`] === 'undefined') {
 			return html``;
 		}
 
-		const state = this.hass.states[`switch.${this.config.sensor_name}_${this._selectedInstanceEntity}_pause`].state;
+		const state = this.hass.states[`switch.${this.config.sensor_name}_${this._selectedInstanceEntity}_pause`].state as string;
 		return html`
           <div class="titleitem">
             <ha-icon-button
                 class="pause_${state}"
-                @click="${this._togglePause}"
+                @click="${this._togglePause.bind(this)}"
                 title="${localize('actions.pause')}"
                 id="pause">
               <ha-icon class="title-item-button" icon="mdi:pause"></ha-icon>
@@ -455,7 +436,7 @@ export class MyJDownloaderCard extends LitElement {
           <div class="titleitem">
             <ha-icon-button
                 class="stop_${state ? 'off' : 'on'}"
-                @click="${this._toggleStop}"
+                @click="${this._toggleStop.bind(this)}"
                 title="${localize('actions.stop')}"
                 id="stop">
               <ha-icon class="title-item-button" icon="mdi:stop"></ha-icon>
@@ -469,16 +450,16 @@ export class MyJDownloaderCard extends LitElement {
 			return html``;
 		}
 
-		if (typeof this.hass.states[`switch.${this.config.sensor_name}_${this._selectedInstanceEntity}_limit`] == 'undefined') {
+		if (typeof this.hass.states[`switch.${this.config.sensor_name}_${this._selectedInstanceEntity}_limit`] === 'undefined') {
 			return html``;
 		}
 
-		const state = this.hass.states[`switch.${this.config.sensor_name}_${this._selectedInstanceEntity}_limit`].state;
+		const state = this.hass.states[`switch.${this.config.sensor_name}_${this._selectedInstanceEntity}_limit`].state as string;
 		return html`
           <div class="titleitem">
             <ha-icon-button
                 class="speed_limit_${state}"
-                @click="${this._toggleLimit}"
+                @click="${this._toggleLimit.bind(this)}"
                 title="${localize('actions.speed_limit')}"
                 id="speed_limit">
               <ha-icon class="title-item-button" icon="mdi:download-lock"></ha-icon>
@@ -504,7 +485,7 @@ export class MyJDownloaderCard extends LitElement {
 		return html`
           <ha-select
               class="instance-dropdown"
-              @selected=${this._toggleInstance}
+              @selected=${this._toggleInstance.bind(this)}
               .value=${this.selectedInstance}>
             ${this._getInstances().map((type) => html`
               <mwc-list-item .value=${type}>${type}</mwc-list-item>`)}
@@ -532,8 +513,7 @@ export class MyJDownloaderCard extends LitElement {
 		};
 	}
 
-	static get styles() {
-		return css`
+	static readonly styles = css`
       /* Header */
 
       .card-header {
@@ -726,5 +706,4 @@ export class MyJDownloaderCard extends LitElement {
         font-size: 0.7em;
       }
     `;
-	}
 }

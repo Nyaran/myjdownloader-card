@@ -70,6 +70,7 @@ export interface Package {
 	speed: number
 	status: string
 	statusIconKey: string
+	uuid: number
 	links: DownloadLink[]
 }
 

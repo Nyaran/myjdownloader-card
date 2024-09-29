@@ -1,5 +1,6 @@
 import en from './languages/en.json';
 import es from './languages/es.json';
+import { LovelaceCard } from 'custom-card-helpers';
 
 interface LanguageEntry {
 	[key: string]: LanguageEntry | string;
@@ -12,7 +13,7 @@ const languages: Record<string, LanguageEntry> = {
 function getLanguage(): keyof typeof languages {
 	let lang = localStorage.getItem('selectedLanguage')?.replace(/['"]+/g, '').replace('-', '_');
 	if (lang == null || lang === 'null') {
-		const _hass = (document.querySelector('home-assistant') as any).hass;
+		const _hass = (document.querySelector('home-assistant') as LovelaceCard).hass;
 		lang = _hass.selectedLanguage || _hass.language;
 	}
 
@@ -25,12 +26,12 @@ export function localize(string: string, search = '', replace = ''): string {
 
 	try {
 		translated = string.split('.').reduce((langEntry, key) => langEntry[key], languages[lang]) as string;
-	} catch (e) {
-		translated = string.split('.').reduce((langEntry, key) => langEntry[key], languages['en']) as string;
+	} catch {
+		translated = string.split('.').reduce((langEntry, key) => langEntry[key], languages.en) as string;
 	}
 
 	if (translated === undefined) {
-		translated = string.split('.').reduce((langEntry, i) => langEntry[i], languages['en']) as string;
+		translated = string.split('.').reduce((langEntry, i) => langEntry[i], languages.en) as string;
 	}
 
 	if (search !== '' && replace !== '') {

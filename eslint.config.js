@@ -38,48 +38,48 @@ export default tseslint.config(
 			'semi': ['error', 'always'],
 			'brace-style': ['error', '1tbs'],
 			'space-before-blocks': ['error', 'always'],
-			"no-console": "error",
-			"block-scoped-var": "warn",
-			"default-case": "error",
-			"eqeqeq": ["error", "always", {"null": "ignore"}],
-			"no-alert": "error",
-			"no-else-return": "warn",
-			"no-empty-function": "error",
-			"no-eval": "warn",
-			"no-extra-label": "warn",
-			"array-bracket-spacing": ["warn","never"],
-			"block-spacing": ["warn", "always"],
-			"camelcase": "error",
-			"comma-spacing": "warn",
-			"eol-last": ["error", "always"],
-			"func-style": ["warn", "declaration", {"allowArrowFunctions":  true}],
-			"no-multiple-empty-lines": ["error", {"max": 1}],
-			"comma-dangle": ["error", "only-multiline"],
-			"strict": ["error", "never"],
-			"space-before-function-paren": ["error", {
-		"anonymous": "never",
-		"named": "never",
-		"asyncArrow": "always"
+			'no-console': 'error',
+			'block-scoped-var': 'warn',
+			'default-case': 'error',
+			'eqeqeq': ['error', 'always', {'null': 'ignore'}],
+			'no-alert': 'error',
+			'no-else-return': 'warn',
+			'no-empty-function': 'error',
+			'no-eval': 'warn',
+			'no-extra-label': 'warn',
+			'array-bracket-spacing': ['warn','never'],
+			'block-spacing': ['warn', 'always'],
+			'camelcase': ['error', { properties: 'never' }],
+			'comma-spacing': 'warn',
+			'eol-last': ['error', 'always'],
+			'func-style': ['warn', 'declaration', {'allowArrowFunctions':  true}],
+			'no-multiple-empty-lines': ['error', {'max': 1}],
+			'comma-dangle': ['error', 'only-multiline'],
+			'strict': ['error', 'never'],
+			'space-before-function-paren': ['error', {
+		'anonymous': 'never',
+		'named': 'never',
+		'asyncArrow': 'always'
 			}],
-			"new-parens": "error",
-			"no-case-declarations": "warn",
-			"prefer-const": "error",
-			"prefer-destructuring": ["warn", {
-				"VariableDeclarator": {"object": true, "array": false},
-				"AssignmentExpression": {"object": false, "array": false},
+			'new-parens': 'error',
+			'no-case-declarations': 'warn',
+			'prefer-const': 'error',
+			'prefer-destructuring': ['warn', {
+				'VariableDeclarator': {'object': true, 'array': false},
+				'AssignmentExpression': {'object': false, 'array': false},
 			}],
-			"prefer-rest-params": "error",
-			"prefer-template": "warn",
-			"new-cap": "warn",
-			"callback-return": "error",
-			"max-len": [
-		"warn",
+			'prefer-rest-params': 'error',
+			'prefer-template': 'warn',
+			'new-cap': 'warn',
+			'callback-return': 'error',
+			'max-len': [
+		'warn',
 		{
-		"code": 160,
-		"ignoreComments": true,
-		"ignoreStrings": true,
-		"ignoreTemplateLiterals": true,
-		"ignoreRegExpLiterals": true
+		'code': 160,
+		'ignoreComments': true,
+		'ignoreStrings': true,
+		'ignoreTemplateLiterals': true,
+		'ignoreRegExpLiterals': true
 		}
 			],
 
@@ -90,8 +90,11 @@ export default tseslint.config(
 			'@typescript-eslint/prefer-nullish-coalescing': 'off', // requires strictNullChecks
 			'@typescript-eslint/no-unnecessary-condition': 'off', // requires strictNullChecks
 
-			"promise/prefer-await-to-then": "error",
-			"promise/prefer-await-to-callbacks": "error",
+			'promise/prefer-await-to-then': 'error',
+			'promise/prefer-await-to-callbacks': 'error',
+
+			'@typescript-eslint/no-unnecessary-type-assertion': 'off', // False positive
+			'@typescript-eslint/no-unsafe-member-access': 'off', // Issues accessing arrays using TemplateStrings
 		},
 	},
 	{
@@ -102,30 +105,4 @@ export default tseslint.config(
 			'chai-friendly/no-unused-expressions': 'error',
 		},
 	},
-	{
-		rules: {
-			'@typescript-eslint/class-literal-property-style': 'off',
-			'@typescript-eslint/consistent-type-definitions': 'off',
-			'@typescript-eslint/dot-notation': 'off',
-			'@typescript-eslint/no-explicit-any': 'off',
-			'@typescript-eslint/no-floating-promises': 'off',
-			'@typescript-eslint/no-invalid-void-type': 'off',
-			'@typescript-eslint/no-unnecessary-type-assertion': 'off',
-			'@typescript-eslint/no-unsafe-member-access': 'off',
-			'@typescript-eslint/no-unsafe-call': 'off',
-			'@typescript-eslint/no-unsafe-assignment': 'off',
-			'@typescript-eslint/no-unsafe-return': 'off',
-			'@typescript-eslint/no-unsafe-argument': 'off',
-			'@typescript-eslint/no-unused-vars': 'off',
-			'@typescript-eslint/require-await': 'off',
-			'@typescript-eslint/unbound-method': 'off',
-			'camelcase': 'off',
-			'eqeqeq': 'off',
-			'indent': 'off',
-			'new-cap': 'off',
-			'no-console': 'off',
-			'no-else-return': 'off',
-			'prefer-destructuring': 'off',
-		}
-	}
 );
