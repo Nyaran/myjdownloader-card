@@ -1,43 +1,42 @@
 {
-  "compilerOptions": {
-    "target": "ES2021",
-    "module": "NodeNext",
-    "moduleResolution": "node16",
-    "lib": [
-      "DOM",
-      "DOM.Iterable",
-      "ES2021"
-    ],
-    "sourceMap": true,
-    "removeComments": false,
-    "strictFunctionTypes": false,
-    "noImplicitAny": true,
-    "noImplicitReturns": true,
-    "noEmitOnError": true,
-    "noLib": false,
-    "emitDecoratorMetadata": true,
-    "experimentalDecorators": true,
-    "outDir": "./build",
-    "resolveJsonModule": true,
-    "allowJs": true,
-    "checkJs": false,
-    "skipLibCheck": true,
-    "esModuleInterop": true,
-    "strictNullChecks": false,
-
-    "noEmit": true,
-    "noUnusedParameters": true,
-     "noFallthroughCasesInSwitch": true,
-    "strict": true,
-    "allowSyntheticDefaultImports": true
-  },
-  "ts-node": {
-    "esm": true,
-  },
-  "exclude": [
-    "./node_modules"
-  ],
-  "include": [
-    "./src",
-  ]
+	"compilerOptions": {
+		"target": "ES2021",
+		"module": "NodeNext",
+		"moduleResolution": "node16",
+		"lib": [
+			"DOM",
+			"DOM.Iterable",
+			"ES2021"
+		],
+		"sourceMap": true,
+		"removeComments": false,
+		"strictFunctionTypes": false,
+		"noImplicitAny": true,
+		"noImplicitReturns": true,
+		"noEmitOnError": true,
+		"noLib": false,
+		"emitDecoratorMetadata": true,
+		"experimentalDecorators": true,
+		"outDir": "./build",
+		"resolveJsonModule": true,
+		"allowJs": true,
+		"checkJs": false,
+		"skipLibCheck": true,
+		"esModuleInterop": true,
+		"strictNullChecks": false,
+		"noEmit": true,
+		"noUnusedParameters": true,
+		"noFallthroughCasesInSwitch": true,
+		"strict": true,
+		"allowSyntheticDefaultImports": true
+	},
+	"ts-node": {
+		"esm": true
+	},
+	"exclude": [
+		"./node_modules"
+	],
+	"include": [
+		"./src"
+	]
 }

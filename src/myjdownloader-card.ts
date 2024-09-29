@@ -1,9 +1,7 @@
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-nocheck
 import { css, html, LitElement, PropertyValues } from 'lit';
 import { customElement, property, state } from 'lit/decorators.js';
 import { getLovelace, hasConfigOrEntityChanged, HomeAssistant, LovelaceCardEditor } from 'custom-card-helpers';
-import { MyJDownloaderCardConfig } from './types.js';
+import { DownloadLink, Downloads, MyJDownloaderCardConfig, Package } from './types.js';
 import { CARD_VERSION } from './const.js';
 import { localize } from './localize/localize.js';
 import { slugify } from './utils.js';
@@ -147,23 +145,25 @@ export class MyJDownloaderCard extends LitElement {
             <div class="no-downloads">${localize('downloads.no_downloads')}</div>`}`;
 	}
 
-	_renderDownloadList(downloads) {
+	_renderDownloadList(downloads: Downloads) {
+		let renderPackageMethod, renderLinkMethod;
+
 		if (this.config.display_mode === 'compact') {
-			if (['full', 'packages'].includes(this.config.list_mode as string)) {
-				return Object.entries(downloads).map(([uuid, pack]) => this.renderPackage(uuid, pack));
-			} else {
-				return Object.values(downloads).map(link => this.renderLink(link));
-			}
+			renderPackageMethod = this.renderPackage;
+			renderLinkMethod = this.renderDownloadLink;
 		} else {
-			if (['full', 'packages'].includes(this.config.list_mode as string)) {
-				return Object.entries(downloads).map(([uuid, pack]) => this.renderPackageFull(uuid, pack));
-			} else {
-				return Object.values(downloads).map(link => this.renderLinkFull(link));
-			}
+			renderPackageMethod = this.renderPackageFull;
+			renderLinkMethod = this.renderDownloadLinkFull;
+		}
+
+		if (['full', 'packages'].includes(this.config.list_mode as string)) {
+			return Object.entries(downloads).map(([uuid, pack]) => renderPackageMethod.bind(this)(parseInt(uuid), pack as Package));
+		} else {
+			return Object.values(downloads).map(downloadLink => renderLinkMethod.bind(this)(downloadLink as DownloadLink));
 		}
 	}
 
-	_buildPackage(pack) {
+	_buildPackage(pack: Package) {
 		return {
 			activeTask: pack.activeTask,
 			bytesLoaded: pack.bytesLoaded,
@@ -183,34 +183,37 @@ export class MyJDownloaderCard extends LitElement {
 			speed: pack.speed,
 			status: pack.status,
 			statusIconKey: pack.statusIconKey,
+			// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+			// @ts-expect-error
 			links: [],
 		};
 	}
 
-	_buildLink(link) {
+	_buildDownloadLink(downloadLink: DownloadLink) {
+		console.log('_buildDownloadLink - DownloadLink', downloadLink);
 		return {
-			addedDate: link.addedDate,
-			bytesLoaded: link.bytesLoaded,
-			bytesTotal: link.bytesTotal,
-			percent: ((100 * link.bytesLoaded) / link.bytesTotal) || 0,
-			comment: link.comment,
-			downloadPassword: link.downloadPassword,
-			enabled: link.enabled,
-			eta: link.eta,
-			extractionStatus: link.extractionStatus,
-			finished: link.finished,
-			finishedDate: link.finishedDate,
-			host: link.host,
-			name: link.name,
-			packageUUID: link.packageUUID,
-			priority: link.priority,
-			running: link.running,
-			skipped: link.skipped,
-			speed: link.speed,
-			status: link.status,
-			statusIconKey: link.statusIconKey,
-			url: link.url,
-			uuid: link.uuid,
+			addedDate: downloadLink.addedDate,
+			bytesLoaded: downloadLink.bytesLoaded,
+			bytesTotal: downloadLink.bytesTotal,
+			percent: ((100 * downloadLink.bytesLoaded) / downloadLink.bytesTotal) || 0,
+			comment: downloadLink.comment,
+			downloadPassword: downloadLink.downloadPassword,
+			enabled: downloadLink.enabled,
+			eta: downloadLink.eta,
+			extractionStatus: downloadLink.extractionStatus,
+			finished: downloadLink.finished,
+			finishedDate: downloadLink.finishedDate,
+			host: downloadLink.host,
+			name: downloadLink.name,
+			packageUUID: downloadLink.packageUUID,
+			priority: downloadLink.priority,
+			running: downloadLink.running,
+			skipped: downloadLink.skipped,
+			speed: downloadLink.speed,
+			status: downloadLink.status,
+			statusIconKey: downloadLink.statusIconKey,
+			url: downloadLink.url,
+			uuid: downloadLink.uuid,
 		};
 	}
 
@@ -221,8 +224,10 @@ export class MyJDownloaderCard extends LitElement {
 			if (typeof this.hass.states[`sensor.${this.config.sensor_name}_${this.selectedInstanceEntity}_packages`] == 'undefined') {
 				throw new Error('error.no_sensor_packages');
 			} else {
-				const packages = this.hass.states[`sensor.${this.config.sensor_name}_${this.selectedInstanceEntity}_packages`].attributes['packages'];
-				packages.forEach(pack => {
+				const {packages} = this.hass.states[`sensor.${this.config.sensor_name}_${this.selectedInstanceEntity}_packages`].attributes;
+				packages.forEach((pack: Package) => {
+					// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+					// @ts-expect-error
 					downloads[pack.uuid] = this._buildPackage(pack);
 				});
 			}
@@ -233,12 +238,16 @@ export class MyJDownloaderCard extends LitElement {
 				throw new Error('error.no_sensor_links');
 			} else {
 				const links = this.hass.states[`sensor.${this.config.sensor_name}_${this.selectedInstanceEntity}_links`].attributes['links'];
-				links.forEach(link => {
-					const linkData = this._buildLink(link);
+				links.forEach((link: DownloadLink) => {
+					const linkData = this._buildDownloadLink(link);
 
 					if (this.config.list_mode === 'full') {
+						// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+						// @ts-expect-error
 						downloads[link.packageUUID].links.push(linkData);
 					} else {
+						// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+						// @ts-expect-error
 						downloads[link.uuid] = linkData;
 					}
 				});
@@ -264,34 +273,36 @@ export class MyJDownloaderCard extends LitElement {
 		};
 	}
 
-	_getInstances() {
+	_getInstances(): string[] {
 		return typeof this.hass.states[`sensor.${this.config.sensor_name}s_online`] != 'undefined' ? this.hass.states[`sensor.${this.config.sensor_name}s_online`].attributes.jdownloaders : [];
 	}
 
-	_toggleInstance(ev) {
+	_toggleInstance(ev: CustomEvent) {
+		// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+		// @ts-expect-error
 		this.selectedInstance = ev.target.value;
 	}
 
-	_togglePlay() {
-		this.hass.callService('myjdownloader', 'start_downloads', { entity_id: `sensor.${this.config.sensor_name}_${this._selectedInstanceEntity}_status` });
+	async _togglePlay() {
+		await this.hass.callService('myjdownloader', 'start_downloads', { entity_id: `sensor.${this.config.sensor_name}_${this._selectedInstanceEntity}_status` });
 	}
 
-	_togglePause() {
-		this.hass.callService('switch', 'toggle', { entity_id: `switch.${this.config.sensor_name}_${this._selectedInstanceEntity}_pause` });
+	async _togglePause() {
+		await this.hass.callService('switch', 'toggle', { entity_id: `switch.${this.config.sensor_name}_${this._selectedInstanceEntity}_pause` });
 	}
 
-	_toggleStop() {
-		this.hass.callService('myjdownloader', 'stop_downloads', { entity_id: `sensor.${this.config.sensor_name}_${this._selectedInstanceEntity}_status` });
+	async _toggleStop() {
+		await this.hass.callService('myjdownloader', 'stop_downloads', { entity_id: `sensor.${this.config.sensor_name}_${this._selectedInstanceEntity}_status` });
 	}
 
-	_toggleLimit() {
-		this.hass.callService('switch', 'toggle', { entity_id: `switch.${this.config.sensor_name}_${this._selectedInstanceEntity}_limit` });
+	async _toggleLimit() {
+		await this.hass.callService('switch', 'toggle', { entity_id: `switch.${this.config.sensor_name}_${this._selectedInstanceEntity}_limit` });
 	}
 
-	_downloadStatus(download) {
-		if (download.finished) {
+	_downloadStatus(downloadItem: DownloadLink | Package) {
+		if (downloadItem.finished) {
 			return 'finished';
-		} else if (download.enabled) {
+		} else if (downloadItem.enabled) {
 			return 'downloading';
 		} else {
 			return 'stopped';
@@ -318,7 +329,8 @@ export class MyJDownloaderCard extends LitElement {
 		`;
 	}
 
-	renderPackage(uuid, pack) {
+	renderPackage(uuid: number, pack: Package) {
+		console.log('renderPackage - Package', pack);
 		return html`
           <div class="package-container ${uuid}">
             <div class="progressbar">
@@ -330,24 +342,28 @@ export class MyJDownloaderCard extends LitElement {
               <div class="percent">${pack.percent.toFixed(2)}%</div>
             </div>
             ${this.config.list_mode === 'full' ? html`
-              <div class="links">${pack.links.map(link => this.renderLink(link))}</div>` : ''}
+              <div class="links">${pack.links.map(link => this.renderDownloadLink(link))}</div>` : ''}
           </div>
 		`;
 	}
 
-	renderLink(link) {
+	renderDownloadLink(downloadLink: DownloadLink) {
+		console.log('renderDownloadLink - DownloadLink', downloadLink);
+
 		return html`
           <div class="progressbar">
-            <div class="${this._downloadStatus(link)} progressin"
-                 style="width: ${link.percent}%"></div>
+            <div class="${this._downloadStatus(downloadLink)} progressin"
+                 style="width: ${downloadLink.percent}%"></div>
             <ha-icon class="download-icon" icon="mdi:download"></ha-icon>
-            <div class="name"><a title="${link.name}">${link.name}</a></div>
-            <div class="percent">${link.percent.toFixed(2)}%</div>
+            <div class="name"><a title="${downloadLink.name}">${downloadLink.name}</a></div>
+            <div class="percent">${downloadLink.percent.toFixed(2)}%</div>
           </div>
 		`;
 	}
 
-	renderPackageFull(uuid, pack) {
+	renderPackageFull(uuid: number, pack: Package) {
+		console.log('renderPackageFull - Package', pack);
+
 		return html`
           <div class="package-container ${uuid}">
             <div class="package">
@@ -363,24 +379,26 @@ export class MyJDownloaderCard extends LitElement {
               <div class="package_details">${pack.percent.toFixed(2)} %</div>
             </div>
             <div class="links">
-              ${pack.links.map(link => this.renderLinkFull(link))}
+              ${pack.links.map(link => this.renderDownloadLinkFull(link))}
             </div>
           </div>
 		`;
 	}
 
-	renderLinkFull(link) {
+	renderDownloadLinkFull(downloadLink: DownloadLink) {
+		console.log('renderDownloadLinkFull - DownloadLink', downloadLink);
+
 		return html`
           <div class="link">
             <div class="link_name">
               <ha-icon class="download-icon" icon="mdi:download"></ha-icon>
-              <a title="${link.name}">${link.name}</a></div>
-            <div class="link_status">${localize(`status.${this._downloadStatus(link)}`)}</div>
+              <a title="${downloadLink.name}">${downloadLink.name}</a></div>
+            <div class="link_status">${localize(`status.${this._downloadStatus(downloadLink)}`)}</div>
             <div class="progressbar">
-              <div class="${this._downloadStatus(link)} progressin" style="width: ${link.percent}%">
+              <div class="${this._downloadStatus(downloadLink)} progressin" style="width: ${downloadLink.percent}%">
               </div>
             </div>
-            <div class="link_details">${link.percent.toFixed(2)} %</div>
+            <div class="link_details">${downloadLink.percent.toFixed(2)} %</div>
           </div>
 		`;
 	}
@@ -498,8 +516,20 @@ export class MyJDownloaderCard extends LitElement {
 	 * Card height. A height of 1 is equivalent to 50 pixels
 	 * download size: 28px
 	 */
-	getCardSize() {
+	public getCardSize() {
 		return 1;
+	}
+
+	/**
+	 * Sizing in sections view
+	 */
+	public getLayoutOptions() {
+		return {
+			grid_rows: 4,
+			grid_min_rows: 3,
+			grid_columns: 4,
+			grid_min_columns: 2,
+		};
 	}
 
 	static get styles() {

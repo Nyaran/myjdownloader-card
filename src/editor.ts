@@ -1,5 +1,3 @@
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-nocheck
 import { html, LitElement, TemplateResult } from 'lit';
 import { fireEvent, HomeAssistant, LovelaceCardEditor } from 'custom-card-helpers';
 import { ScopedRegistryHost } from '@lit-labs/scoped-registry-mixin';
@@ -66,7 +64,7 @@ export class MyJDownloaderCardEditor extends ScopedRegistryHost(LitElement) impl
 	public setConfig(config: MyJDownloaderCardConfig): void {
 		this._config = config;
 
-		this.loadCardHelpers();
+		void this.loadCardHelpers();
 	}
 
 	protected render(): TemplateResult | void {
@@ -98,7 +96,7 @@ export class MyJDownloaderCardEditor extends ScopedRegistryHost(LitElement) impl
 		this._helpers = await window.loadCardHelpers();
 	}
 
-	private _valueChanged(ev): void {
+	private _valueChanged(ev: CustomEvent): void {
 		console.log('ev.detail.value', ev.detail.value);
 		fireEvent(this, 'config-changed', { config: ev.detail.value });
 	}
