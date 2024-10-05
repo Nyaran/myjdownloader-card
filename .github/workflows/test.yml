@@ -33,7 +33,7 @@ jobs:
 
       # Runs a set of commands using the runners shell
       - name: Run the linter
-        run: npm lint
+        run: npm run lint
 
       # Runs a set of commands using the runners shell
       #- name: Run the tests
