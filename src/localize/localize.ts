@@ -1,5 +1,5 @@
-import en from './languages/en.json';
-import es from './languages/es.json';
+import en from './languages/en.json' with { type: 'json' };
+import es from './languages/es.json' with { type: 'json' };
 import { LovelaceCard } from 'custom-card-helpers';
 
 interface LanguageEntry {
