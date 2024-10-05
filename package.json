@@ -37,7 +37,7 @@
 		"start": "run-s 'rollup -- --watch'",
 		"build": "run-s clean lint rollup",
 		"rollup": "rollup -c rollup.config.js",
-    "lint": "eslint --max-warnings 0 ./src"
+    	"lint": "eslint --max-warnings 0 ./src"
 	},
 	"dependencies": {
 		"@lit-labs/scoped-registry-mixin": "1.0.3",
