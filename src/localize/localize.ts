@@ -1,41 +1,41 @@
-import * as en from './languages/en.json';
-import * as es from './languages/es.json';
+import en from './languages/en.json' with { type: 'json' };
+import es from './languages/es.json' with { type: 'json' };
+import { LovelaceCard } from 'custom-card-helpers';
 
-const languages: LanguagesObject = {
-  en,
-  es,
+interface LanguageEntry {
+	[key: string]: LanguageEntry | string;
+}
+const languages: Record<string, LanguageEntry> = {
+	en,
+	es,
 };
 
-type LanguagesObject = {
-  [key: string]: LanguagesObject | string
-}
+function getLanguage(): keyof typeof languages {
+	let lang = localStorage.getItem('selectedLanguage')?.replace(/['"]+/g, '').replace('-', '_');
+	if (lang == null || lang === 'null') {
+		const _hass = (document.querySelector('home-assistant') as LovelaceCard).hass;
+		lang = _hass.selectedLanguage || _hass.language;
+	}
 
-function getLanguage(): string {
-  let lang = localStorage.getItem('selectedLanguage')?.replace(/['"]+/g, '').replace('-', '_');
-  if (lang == null || lang === 'null') {
-    const _hass = (document.querySelector('home-assistant') as any).hass;
-    lang = _hass.selectedLanguage || _hass.language;
-  }
-
-  return lang || 'en';
+	return Object.keys(languages).includes(lang) ? lang as keyof typeof languages : 'en';
 }
 
 export function localize(string: string, search = '', replace = ''): string {
-  const lang = getLanguage();
-  let translated: string;
+	const lang = getLanguage();
+	let translated: string;
 
-  try {
-    translated = string.split('.').reduce((o, i) => o[i], languages[lang]) as string;
-  } catch (e) {
-    translated = string.split('.').reduce((o, i) => o[i], languages['en']) as string;
-  }
+	try {
+		translated = string.split('.').reduce((langEntry, key) => langEntry[key], languages[lang]) as string;
+	} catch {
+		translated = string.split('.').reduce((langEntry, key) => langEntry[key], languages.en) as string;
+	}
 
-  if (translated === undefined) {
-    translated = string.split('.').reduce((o, i) => o[i], languages['en']) as string;
-  }
+	if (translated === undefined) {
+		translated = string.split('.').reduce((langEntry, i) => langEntry[i], languages.en) as string;
+	}
 
-  if (search !== '' && replace !== '') {
-    translated = translated.replace(search, replace);
-  }
-  return translated || string;
+	if (search !== '' && replace !== '') {
+		translated = translated.replace(search, replace);
+	}
+	return translated || string;
 }

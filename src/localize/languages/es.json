@@ -4,7 +4,7 @@
   },
   "config": {
     "invalid": "Configuración inválida",
-    "header_title":"Título",
+    "header_title": "Título",
     "sensor_name": "Nombre sensor",
     "display_mode": "Modo de visualización",
     "display_mode_label": {
@@ -34,7 +34,7 @@
     "stopping": "Parando",
     "finished": "Terminado",
     "running": "En curso",
-    "pause": "Pausado",
+    "paused": "Pausado",
     "idle": "Inactivo"
   },
   "downloads": {
