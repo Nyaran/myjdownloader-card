@@ -2,7 +2,7 @@ import { css, html, LitElement, PropertyValues } from 'lit';
 import { customElement, property, state } from 'lit/decorators.js';
 import { getLovelace, hasConfigOrEntityChanged, HomeAssistant, LovelaceCardEditor } from 'custom-card-helpers';
 import { DownloadLink, Downloads, MyJDownloaderCardConfig, Package } from './types.js';
-import { CARD_VERSION } from './const.js';
+import { CARD_VERSION } from './version.js';
 import { localize } from './localize/localize.js';
 import { slugify } from './utils.js';
 import './editor.js';
