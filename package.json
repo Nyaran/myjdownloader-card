@@ -35,7 +35,9 @@
 	"scripts": {
 		"clean": "rimraf dist",
 		"start": "run-s 'rollup -- --watch'",
+		"prebuild": "node -p \"'export const CARD_VERSION = \\'' + require('./package.json').version + '\\';'\" > src/version.ts",
 		"build": "run-s clean lint rollup",
+		"postbuild": "node -p \"'export const CARD_VERSION = \\'0.0.0\\';'\" > src/version.ts",
 		"rollup": "rollup -c rollup.config.js",
 		"lint": "eslint --max-warnings 0 ./src"
 	},
