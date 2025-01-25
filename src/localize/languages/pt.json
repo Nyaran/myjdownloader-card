@@ -1,0 +1,53 @@
+{
+  "common": {
+    "version": "Versão"
+  },
+  "config": {
+    "invalid": "Configuração inválida",
+    "header_title": "Título",
+    "sensor_name": "Nome do sensor",
+    "display_mode": "Modo de visualização",
+    "display_mode_label": {
+      "full": "Completo",
+      "compact": "Compacto"
+    },
+    "wrong_display_mode": "'display_mode' aceita apenas 'compact' e 'full' como valor",
+    "list_mode": "Modo de lista",
+    "list_mode_label": {
+      "full": "Completo",
+      "packages": "Pacotes",
+      "links": "Links"
+    },
+    "wrong_list_mode": "'list_mode' aceita apenas 'full', 'packages' e 'links' como valor",
+    "default_instance": "Instância padrão",
+    "hide_title": "Ocultar título",
+    "hide_instance": "Ocultar selecionador de instância",
+    "hide_play": "Ocultar botão de iniciar",
+    "hide_pause": "Ocultar botão de pausar",
+    "hide_stop": "Ocultar botão de parar",
+    "hide_speed_limit": "Ocultar botão de limite de velocidade"
+  },
+  "status": {
+    "no_sensor": "Sem sensor",
+    "stopped": "Parado",
+    "downloading": "A transferir",
+    "stopping": "A parar",
+    "finished": "Concluído",
+    "running": "Em execução",
+    "paused": "Em pausa",
+    "idle": "Inativo"
+  },
+  "downloads": {
+    "no_downloads": "Sem transferências"
+  },
+  "error": {
+    "no_sensor_packages": "O sensor 'packages' não está presente ou não está ativado. Ative-o no seu próprio serviço.",
+    "no_sensor_links": "O sensor 'links' não está presente ou não está ativado. Ative-o no seu próprio serviço."
+  },
+  "actions": {
+    "play": "Iniciar transferências",
+    "pause": "Pausar transferências",
+    "stop": "Parar transferências",
+    "speed_limit": "Limite de velocidade"
+  }
+}
