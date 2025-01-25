@@ -1,5 +1,6 @@
 import en from './languages/en.json' with { type: 'json' };
 import es from './languages/es.json' with { type: 'json' };
+import pt from './languages/pt.json' with { type: 'json' };
 import { LovelaceCard } from 'custom-card-helpers';
 
 interface LanguageEntry {
@@ -8,6 +9,7 @@ interface LanguageEntry {
 const languages: Record<string, LanguageEntry> = {
 	en,
 	es,
+	pt,
 };
 
 function getLanguage(): keyof typeof languages {
