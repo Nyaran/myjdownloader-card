@@ -11,7 +11,7 @@ interface LanguageEntry {
 const languages: Record<string, LanguageEntry> = {
 	en,
 	es,
-    pt,
+	pt,
 	ptBR,
 };
 
