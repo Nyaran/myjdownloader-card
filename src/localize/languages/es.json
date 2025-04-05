@@ -1,53 +1,63 @@
 {
-  "common": {
-    "version": "Versión"
-  },
-  "config": {
-    "invalid": "Configuración inválida",
-    "header_title": "Título",
-    "sensor_name": "Nombre sensor",
-    "display_mode": "Modo de visualización",
-    "display_mode_label": {
-      "full": "Completo",
-      "compact": "Compacto"
-    },
-    "wrong_display_mode": "'display_mode' solo acepta 'compact' y 'full' como valor",
-    "list_mode": "Modo de lista",
-    "list_mode_label": {
-      "full": "Completa",
-      "packages": "Paquetes",
-      "links": "Enlaces"
-    },
-    "wrong_list_mode": "'list_mode' solo acepta 'full', 'packages' y 'links' como valor",
-    "default_instance": "Instancia por defecto",
-    "hide_title": "Ocultar título",
-    "hide_instance": "Ocultar selector de instancias",
-    "hide_play": "Ocultar botón iniciar",
-    "hide_pause": "Ocultar botón pausa",
-    "hide_stop": "Ocultar botón parar",
-    "hide_speed_limit": "Ocultar botón límite velocidad"
-  },
-  "status": {
-    "no_sensor": "Sin sensor",
-    "stopped": "Detenido",
-    "downloading": "Descargando",
-    "stopping": "Parando",
-    "finished": "Terminado",
-    "running": "En curso",
-    "paused": "Pausado",
-    "idle": "Inactivo"
-  },
-  "downloads": {
-    "no_downloads": "Sin descargas"
-  },
-  "error": {
-    "no_sensor_packages": "El sensor 'packages' no está presente o no está habilitado. Habilitalo en su servicio correspondiente.",
-    "no_sensor_links": "El sensor 'links' no está presente o no está habilitado. Habilitalo en su servicio correspondiente."
-  },
-  "actions": {
-    "speed_limit": "Límite velocidad",
-    "play": "Iniciar Descargas",
-    "pause": "Pausar Descargas",
-    "stop": "Parar Descargas"
-  }
+	"common": {
+		"version": "Versión"
+	},
+	"config": {
+		"invalid": "Configuración inválida",
+		"header_title": "Título",
+		"sensor_name": "Nombre sensor",
+		"display_mode": "Modo de visualización",
+		"display_mode_label": {
+			"full": "Completo",
+			"compact": "Compacto"
+		},
+		"wrong_display_mode": "'display_mode' solo acepta 'compact' y 'full' como valor",
+		"list_mode": "Modo de lista",
+		"list_mode_label": {
+			"full": "Completa",
+			"packages": "Paquetes",
+			"links": "Enlaces"
+		},
+		"wrong_list_mode": "'list_mode' solo acepta 'full', 'packages' y 'links' como valor",
+		"default_instance": "Instancia por defecto",
+		"hide_title": "Ocultar título",
+		"hide_instance": "Ocultar selector de instancias",
+		"hide_play": "Ocultar botón iniciar",
+		"hide_pause": "Ocultar botón pausa",
+		"hide_stop": "Ocultar botón parar",
+		"hide_speed_limit": "Ocultar botón límite velocidad",
+		"hide_add_link": "Ocultar añadir enlace"
+	},
+	"status": {
+		"no_sensor": "Sin sensor",
+		"stopped": "Detenido",
+		"downloading": "Descargando",
+		"stopping": "Parando",
+		"finished": "Terminado",
+		"running": "En curso",
+		"paused": "Pausado",
+		"idle": "Inactivo"
+	},
+	"downloads": {
+		"no_downloads": "Sin descargas"
+	},
+	"error": {
+		"no_sensor_packages": "El sensor 'packages' no está presente o no está habilitado. Habilitalo en su servicio correspondiente.",
+		"no_sensor_links": "El sensor 'links' no está presente o no está habilitado. Habilitalo en su servicio correspondiente."
+	},
+	"actions": {
+		"speed_limit": "Límite velocidad",
+		"play": "Iniciar Descargas",
+		"pause": "Pausar Descargas",
+		"stop": "Parar Descargas",
+		"add_link": {
+			"label": "Añadir enlace",
+			"placeholder": "Tu enlace de descarga",
+			"button": "Añadir",
+			"error": {
+				"empty": "El enlace no puede estar vacío",
+				"invalid": "El enlace no es válido"
+			}
+		}
+	}
 }
