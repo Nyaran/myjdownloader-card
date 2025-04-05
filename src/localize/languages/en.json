@@ -1,53 +1,63 @@
 {
-  "common": {
-    "version": "Version"
-  },
-  "config": {
-    "invalid": "Invalid configuration",
-    "header_title": "Title",
-    "sensor_name": "Sensor name",
-    "display_mode": "Display mode",
-    "display_mode_label": {
-      "full": "Full",
-      "compact": "Compact"
-    },
-    "wrong_display_mode": "'display_mode' accepts only 'compact' and 'full' as value",
-    "list_mode": "List mode",
-    "list_mode_label": {
-      "full": "Full",
-      "packages": "Packages",
-      "links": "Links"
-    },
-    "wrong_list_mode": "'list_mode' accepts only 'full', 'packages' and 'links' as value",
-    "default_instance": "Default instance",
-    "hide_title": "Hide title",
-    "hide_instance": "Hide instance selector",
-    "hide_play": "Hide play button",
-    "hide_pause": "Hide pause button",
-    "hide_stop": "Hide stop button",
-    "hide_speed_limit": "Hide speed limit button"
-  },
-  "status": {
-    "no_sensor": "No sensor",
-    "stopped": "Stopped",
-    "downloading": "Downloading",
-    "stopping": "Stopping",
-    "finished": "Finished",
-    "running": "Running",
-    "paused": "Paused",
-    "idle": "Idle"
-  },
-  "downloads": {
-    "no_downloads": "No downloads"
-  },
-  "error": {
-    "no_sensor_packages": "The 'packages' sensor is not present or is not enabled. Enable it on its own service.",
-    "no_sensor_links": "The 'links' sensor is not present or is not enabled. Enable it on its own service."
-  },
-  "actions": {
-    "play": "Start Downloads",
-    "pause": "Pause Downloads",
-    "stop": "Stop Downloads",
-    "speed_limit": "Speed Limit"
-  }
+	"common": {
+		"version": "Version"
+	},
+	"config": {
+		"invalid": "Invalid configuration",
+		"header_title": "Title",
+		"sensor_name": "Sensor name",
+		"display_mode": "Display mode",
+		"display_mode_label": {
+			"full": "Full",
+			"compact": "Compact"
+		},
+		"wrong_display_mode": "'display_mode' accepts only 'compact' and 'full' as value",
+		"list_mode": "List mode",
+		"list_mode_label": {
+			"full": "Full",
+			"packages": "Packages",
+			"links": "Links"
+		},
+		"wrong_list_mode": "'list_mode' accepts only 'full', 'packages' and 'links' as value",
+		"default_instance": "Default instance",
+		"hide_title": "Hide title",
+		"hide_instance": "Hide instance selector",
+		"hide_play": "Hide play button",
+		"hide_pause": "Hide pause button",
+		"hide_stop": "Hide stop button",
+		"hide_speed_limit": "Hide speed limit button",
+		"hide_add_link": "Hide add link"
+	},
+	"status": {
+		"no_sensor": "No sensor",
+		"stopped": "Stopped",
+		"downloading": "Downloading",
+		"stopping": "Stopping",
+		"finished": "Finished",
+		"running": "Running",
+		"paused": "Paused",
+		"idle": "Idle"
+	},
+	"downloads": {
+		"no_downloads": "No downloads"
+	},
+	"error": {
+		"no_sensor_packages": "The 'packages' sensor is not present or is not enabled. Enable it on its own service.",
+		"no_sensor_links": "The 'links' sensor is not present or is not enabled. Enable it on its own service."
+	},
+	"actions": {
+		"play": "Start Downloads",
+		"pause": "Pause Downloads",
+		"stop": "Stop Downloads",
+		"speed_limit": "Speed Limit",
+		"add_link": {
+			"label": "Add link",
+			"placeholder": "Your download link",
+			"button": "Add",
+			"error": {
+				"empty": "The link cannot be empty",
+				"invalid": "The link is not valid"
+			}
+		}
+	}
 }

@@ -87,6 +87,10 @@ export default tseslint.config(
 				allowNumber: true,
 				allowArray: true,
 			}],
+			'@typescript-eslint/no-unused-vars': ['error', {
+				'caughtErrorsIgnorePattern': '^_$',
+			}],
+
 			'@typescript-eslint/prefer-nullish-coalescing': 'off', // requires strictNullChecks
 			'@typescript-eslint/no-unnecessary-condition': 'off', // requires strictNullChecks
 			'@typescript-eslint/no-unnecessary-boolean-literal-compare': 'off', // requires strictNullChecks
@@ -96,6 +100,10 @@ export default tseslint.config(
 
 			'@typescript-eslint/no-unnecessary-type-assertion': 'off', // False positive
 			'@typescript-eslint/no-unsafe-member-access': 'off', // Issues accessing arrays using TemplateStrings
+
+			'@typescript-eslint/no-explicit-any': 'off', // Needs HomeAssistant types before enabling
+			'@typescript-eslint/no-unsafe-return': 'off', // Needs HomeAssistant types before enabling
+			'@typescript-eslint/no-unsafe-assignment': 'off', // Needs HomeAssistant types before enabling
 		},
 	},
 	{

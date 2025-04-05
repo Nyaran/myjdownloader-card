@@ -48,6 +48,8 @@ const SCHEMA = [
 			{ name: 'hide_pause', selector: {boolean: {}} },
 			{ name: 'hide_stop', selector: {boolean: {}} },
 			{ name: 'hide_speed_limit', selector: {boolean: {}} },
+			{ name: 'hide_add_link', selector: {boolean: {}} },
+
 		],
 	},
 ] as const;

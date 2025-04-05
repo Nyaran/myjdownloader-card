@@ -115,6 +115,7 @@ export class MyJDownloaderCard extends LitElement {
             </div>
             <div>
               <div id="toolbar-container">
+                ${this.renderAddLink()}
                 ${this.renderToolbar()}
               </div>
               <div id="downloads">
@@ -288,6 +289,40 @@ export class MyJDownloaderCard extends LitElement {
 		await this.hass.callService('switch', 'toggle', { entity_id: `switch.${this.config.sensor_name}_${this._selectedInstanceEntity}_limit` });
 	}
 
+	async _addLink() {
+		const linkInput = this.shadowRoot?.getElementById('add-link-input') as any;
+		const addButton = this.shadowRoot?.getElementById('add_link') as HTMLButtonElement;
+
+		if (!linkInput.value) {
+			linkInput.invalid = true;
+			linkInput.errorMessage = localize('actions.add_link.error.empty');
+			return;
+		}
+
+		addButton.disabled = true;
+
+		try {
+			await this.hass.callService('myjdownloader', 'add_links', {
+				device_id:  this._getEntity('sensor', 'status').device_id as string,
+				links: [linkInput.value],
+				autostart: true,
+				priority: 'default',
+			});
+			linkInput.value = '';
+			linkInput.invalid = true;
+			linkInput.errorMessage = '';
+		} catch (_) {
+			linkInput.invalid = true;
+			linkInput.errorMessage = localize('actions.add_link.error.invalid');
+		} finally {
+			addButton.disabled = false;
+		}
+	}
+
+	_getEntity(kind: string, name: string) {
+		return (this.hass as any).entities[`${kind}.${this.config.sensor_name}_${this._selectedInstanceEntity}_${name}`];
+	}
+
 	_downloadStatus(downloadItem: DownloadLink | Package) {
 		if (downloadItem.finished) {
 			return 'finished';
@@ -295,6 +330,25 @@ export class MyJDownloaderCard extends LitElement {
 			return 'downloading';
 		}
 		return 'stopped';
+	}
+
+	renderAddLink() {
+		if (this.config.hide_add_link) {
+			return html``;
+		}
+		return html`<div id="add-link">
+			<ha-textfield
+				id="add-link-input"
+				placeholder="${localize('actions.add_link.placeholder')}"
+				label="${localize('actions.add_link.label')}">
+			</ha-textfield>
+			<ha-icon-button
+				@click="${this._addLink.bind(this)}"
+				title="${localize('actions.add_link.button')}"
+				id="add_link">
+				<ha-icon class="title-item-button" icon="mdi:link-variant-plus"></ha-icon>
+			</ha-icon-button>
+		</div>`;
 	}
 
 	renderToolbar() {
@@ -527,6 +581,21 @@ export class MyJDownloaderCard extends LitElement {
       .instance-dropdown {
         flex-grow: 1;
       }
+
+		#add-link {
+			display: grid;
+			grid-template-columns: 1fr auto auto;
+			gap: 8px;
+			align-items: center;
+			margin-left: 1.4em;
+			margin-right: 1.4em;
+		}
+		#add-link ha-textfield {
+			max-width: 100%;
+		}
+		#add-link ha-button {
+			white-space: nowrap;
+		}
 
       /* Downloads */
 
