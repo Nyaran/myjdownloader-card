@@ -16,3 +16,19 @@ updates:
     directory: "/" # Location of package manifests
     schedule:
       interval: "daily"
+    groups:
+      eslint:
+        patterns:
+          - "@eslint/js"
+          - "eslint"
+          - "eslint-*"
+          - "typescript-eslint"
+      lit:
+        patterns:
+          - "lit-*"
+          - "@lit-labs/*"
+      rollup:
+        patterns:
+          - "@rollup/plugin-*"
+          - "rollup-plugin-*"
+          - "rollup"
