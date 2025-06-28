@@ -26,7 +26,9 @@
 		"hide_pause": "Ocultar botão de pausar",
 		"hide_stop": "Ocultar botão de parar",
 		"hide_speed_limit": "Ocultar botão de limite de velocidade",
-		"hide_add_link": "[NT] Hide add link"
+		"hide_add_link": "[NT] Hide add link",
+		"hide_refresh": "[NT] Hide refresh button",
+		"refresh_interval": "[NT] Refresh interval"
 	},
 	"status": {
 		"no_sensor": "Sem sensor",
@@ -50,6 +52,7 @@
 		"pause": "Pausar transferências",
 		"stop": "Parar transferências",
 		"speed_limit": "Limite de velocidade",
+		"refresh": "[NT] Refresh",
 		"add_link": {
 			"label": "[NT] Add link",
 			"placeholder": "[NT] Your download link",

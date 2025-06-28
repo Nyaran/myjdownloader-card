@@ -20,8 +20,16 @@ export interface MyJDownloaderCardConfig extends LovelaceCardConfig {
 	default_instance?: string;
 	hide_title?: boolean;
 	hide_instance?: boolean;
-	hide_speed_limit?: boolean;
+	hide_play?: boolean,
 	hide_pause?: boolean;
+	hide_stop?: boolean,
+	hide_speed_limit?: boolean;
+	hide_refresh?: boolean,
+	refresh_interval?: {
+		hours?: number,
+		minutes?: number,
+		seconds?: number,
+	},
 }
 
 export type Downloads = Record<number, DownloadLink | Package>

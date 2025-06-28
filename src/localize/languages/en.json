@@ -26,7 +26,9 @@
 		"hide_pause": "Hide pause button",
 		"hide_stop": "Hide stop button",
 		"hide_speed_limit": "Hide speed limit button",
-		"hide_add_link": "Hide add link"
+		"hide_add_link": "Hide add link button",
+		"hide_refresh": "Hide refresh button",
+		"refresh_interval": "Refresh interval"
 	},
 	"status": {
 		"no_sensor": "No sensor",
@@ -50,6 +52,7 @@
 		"pause": "Pause Downloads",
 		"stop": "Stop Downloads",
 		"speed_limit": "Speed Limit",
+		"refresh": "Refresh",
 		"add_link": {
 			"label": "Add link",
 			"placeholder": "Your download link",
