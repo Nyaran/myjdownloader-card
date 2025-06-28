@@ -26,7 +26,9 @@
 		"hide_pause": "Ocultar botón pausa",
 		"hide_stop": "Ocultar botón parar",
 		"hide_speed_limit": "Ocultar botón límite velocidad",
-		"hide_add_link": "Ocultar añadir enlace"
+		"hide_add_link": "Ocultar botón añadir enlace",
+		"hide_refresh": "Ocultar botón recargar",
+		"refresh_interval": "Intervalo de recarga"
 	},
 	"status": {
 		"no_sensor": "Sin sensor",
@@ -50,6 +52,7 @@
 		"play": "Iniciar Descargas",
 		"pause": "Pausar Descargas",
 		"stop": "Parar Descargas",
+		"refresh": "Recargar",
 		"add_link": {
 			"label": "Añadir enlace",
 			"placeholder": "Tu enlace de descarga",

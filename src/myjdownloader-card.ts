@@ -78,11 +78,39 @@ export class MyJDownloaderCard extends LitElement {
 			hide_play: false,
 			hide_pause: false,
 			hide_stop: false,
-			hide_speed_limit: false, ...config,
+			hide_speed_limit: false,
+			hide_refresh: false,
+			refresh_interval: {
+				hours: 0,
+				minutes: 1,
+				seconds: 0,
+			},
+			...config,
 		};
 
 		if (this.config.default_instance != null) {
 			this.selectedInstance = this.config.default_instance;
+		}
+	}
+
+	private _intervalId: number | undefined;
+
+	connectedCallback() {
+		super.connectedCallback();
+		const { hours = 0, minutes = 0, seconds = 0 } = this.config.refresh_interval || {};
+		const interval = ((hours * 3600) + (minutes * 60) + seconds) * 1000;
+
+		if (interval > 0) {
+			this._intervalId = window.setInterval(() => {
+				this.requestUpdate();
+			}, interval);
+		}
+	}
+
+	disconnectedCallback() {
+		super.disconnectedCallback();
+		if (this._intervalId) {
+			clearInterval(this._intervalId);
 		}
 	}
 
@@ -91,7 +119,7 @@ export class MyJDownloaderCard extends LitElement {
 			return false;
 		}
 
-		if (changedProps.has('_selectedInstance')) {
+		if (changedProps.size === 0 || changedProps.has('_selectedInstance')) {
 			return true;
 		}
 
@@ -367,6 +395,7 @@ export class MyJDownloaderCard extends LitElement {
             ${this.renderPauseButton()}
             ${this.renderStopButton()}
             ${this.renderLimitButton()}
+            ${this.renderRefreshButton()}
           </div>
 		`;
 	}
@@ -517,6 +546,24 @@ export class MyJDownloaderCard extends LitElement {
                 title="${localize('actions.speed_limit')}"
                 id="speed_limit">
               <ha-icon class="title-item-button" icon="mdi:download-lock"></ha-icon>
+            </ha-icon-button>
+          </div>
+		`;
+	}
+
+	renderRefreshButton() {
+		if (this.config.hide_refresh) {
+			return html``;
+		}
+
+		return html`
+          <div class="titleitem">
+            <ha-icon-button
+                class="refresh"
+                @click="${this.requestUpdate.bind(this)}"
+                title="${localize('actions.refresh')}"
+                id="refresh">
+              <ha-icon class="title-item-button" icon="mdi:reload"></ha-icon>
             </ha-icon-button>
           </div>
 		`;
