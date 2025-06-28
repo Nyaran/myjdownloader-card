@@ -720,11 +720,11 @@ export class MyJDownloaderCard extends LitElement {
       /* Download status */
 
       .downloading {
-        background-color: var(--paper-item-icon-active-color);
+        background-color: var(--state-active-color);
       }
 
       .stopped {
-        background-color: var(--label-badge-grey);
+        background-color: var(--state-inactive-color);
       }
 
       .finished {
