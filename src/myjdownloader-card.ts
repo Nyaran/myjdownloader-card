@@ -138,19 +138,17 @@ export class MyJDownloaderCard extends LitElement {
 
 		return html`
           <ha-card>
-            <div class="card-header">
-              ${this.renderCardHeader()}
-              ${this.renderInstanceSelect()}
-            </div>
-            <div>
-              <div id="toolbar-container">
-                ${this.renderAddLink()}
-                ${this.renderToolbar()}
-              </div>
-              <div id="downloads">
-                ${this._renderDownloads()}
-              </div>
-            </div>
+			<div class="card-header">
+				${this.renderCardHeader()}
+				${this.renderInstanceSelect()}
+			</div>
+			<div id="toolbar-container">
+				${this.renderAddLink()}
+				${this.renderToolbar()}
+			</div>
+			<div id="downloads">
+				${this._renderDownloads()}
+			</div>
           </ha-card>
 		`;
 	}
@@ -617,9 +615,15 @@ export class MyJDownloaderCard extends LitElement {
 
 	static readonly styles = css`
 		/* Header */
+		.type-custom-myjdownloader-card {
+			height: 100%;
+			display: flex;
+			flex-flow: column;
+		}
 
 		.card-header {
 			display: flex;
+			flex: 0 1 auto;
 		}
 
 		.header-title {
@@ -650,6 +654,8 @@ export class MyJDownloaderCard extends LitElement {
 		#downloads {
 			margin-top: 0.4em;
 			padding-bottom: 0.8em;
+			flex: 1 1 auto;
+			overflow: auto;
 		}
 
 		/* Global status */
@@ -753,6 +759,7 @@ export class MyJDownloaderCard extends LitElement {
 			position: relative;
 			display: inline;
 			width: 100%;
+			flex: 0 1 auto;
 		}
 
 		#toolbar {
