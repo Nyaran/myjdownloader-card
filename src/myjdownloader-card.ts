@@ -103,7 +103,7 @@ export class MyJDownloaderCard extends LitElement {
 
 		if (interval > 0) {
 			this._intervalId = window.setInterval(() => {
-				this.requestUpdate();
+				this._performRefresh();
 			}, interval);
 		}
 	}
@@ -571,13 +571,17 @@ export class MyJDownloaderCard extends LitElement {
           <div class="titleitem">
             <ha-icon-button
                 class="refresh"
-                @click="${this.requestUpdate.bind(this)}"
+                @click="${this._performRefresh.bind(this)}"
                 title="${localize('actions.refresh')}"
 				path="${mdi.mdiReload}"
                 id="refresh">
             </ha-icon-button>
           </div>
 		`;
+	}
+
+	_performRefresh() {
+		this.requestUpdate();
 	}
 
 	renderCardHeader() {
