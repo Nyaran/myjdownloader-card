@@ -1,3 +1,4 @@
+import * as mdi from '@mdi/js';
 import { css, html, LitElement, PropertyValues } from 'lit';
 import { customElement, property, state } from 'lit/decorators.js';
 import { getLovelace, hasConfigOrEntityChanged, HomeAssistant, LovelaceCardEditor } from 'custom-card-helpers';
@@ -373,8 +374,8 @@ export class MyJDownloaderCard extends LitElement {
 			<ha-icon-button
 				@click="${this._addLink.bind(this)}"
 				title="${localize('actions.add_link.button')}"
+				path="${mdi.mdiLinkVariantPlus}"
 				id="add_link">
-				<ha-icon class="title-item-button" icon="mdi:link-variant-plus"></ha-icon>
 			</ha-icon-button>
 		</div>`;
 	}
@@ -479,8 +480,8 @@ export class MyJDownloaderCard extends LitElement {
                 class="play_${state ? 'on' : 'off'}"
                 @click="${this._togglePlay.bind(this)}"
                 title="${localize('actions.play')}"
+				path="${mdi.mdiPlay}"
                 id="play">
-              <ha-icon class="title-item-button" icon="mdi:play"></ha-icon>
             </ha-icon-button>
           </div>
 		`;
@@ -502,8 +503,8 @@ export class MyJDownloaderCard extends LitElement {
                 class="pause_${state}"
                 @click="${this._togglePause.bind(this)}"
                 title="${localize('actions.pause')}"
+				path="${mdi.mdiPause}"
                 id="pause">
-              <ha-icon class="title-item-button" icon="mdi:pause"></ha-icon>
             </ha-icon-button>
           </div>
 		`;
@@ -521,8 +522,8 @@ export class MyJDownloaderCard extends LitElement {
                 class="stop_${state ? 'off' : 'on'}"
                 @click="${this._toggleStop.bind(this)}"
                 title="${localize('actions.stop')}"
+				path="${mdi.mdiStop}"
                 id="stop">
-              <ha-icon class="title-item-button" icon="mdi:stop"></ha-icon>
             </ha-icon-button>
           </div>
 		`;
@@ -544,8 +545,8 @@ export class MyJDownloaderCard extends LitElement {
                 class="speed_limit_${state}"
                 @click="${this._toggleLimit.bind(this)}"
                 title="${localize('actions.speed_limit')}"
+				path="${mdi.mdiDownloadLock}"
                 id="speed_limit">
-              <ha-icon class="title-item-button" icon="mdi:download-lock"></ha-icon>
             </ha-icon-button>
           </div>
 		`;
@@ -562,8 +563,8 @@ export class MyJDownloaderCard extends LitElement {
                 class="refresh"
                 @click="${this.requestUpdate.bind(this)}"
                 title="${localize('actions.refresh')}"
+				path="${mdi.mdiReload}"
                 id="refresh">
-              <ha-icon class="title-item-button" icon="mdi:reload"></ha-icon>
             </ha-icon-button>
           </div>
 		`;
@@ -615,19 +616,19 @@ export class MyJDownloaderCard extends LitElement {
 	}
 
 	static readonly styles = css`
-      /* Header */
+		/* Header */
 
-      .card-header {
-        display: flex;
-      }
+		.card-header {
+			display: flex;
+		}
 
-      .header-title {
-        margin-right: 25px;
-      }
+		.header-title {
+			margin-right: 25px;
+		}
 
-      .instance-dropdown {
-        flex-grow: 1;
-      }
+		.instance-dropdown {
+			flex-grow: 1;
+		}
 
 		#add-link {
 			display: grid;
@@ -644,182 +645,182 @@ export class MyJDownloaderCard extends LitElement {
 			white-space: nowrap;
 		}
 
-      /* Downloads */
+		/* Downloads */
 
-      #downloads {
-        margin-top: 0.4em;
-        padding-bottom: 0.8em;
-      }
+		#downloads {
+			margin-top: 0.4em;
+			padding-bottom: 0.8em;
+		}
 
-      /* Global status */
+		/* Global status */
 
-      .c-running {
-        color: var(--label-badge-yellow);
-      }
+		.c-running {
+			color: var(--label-badge-yellow);
+		}
 
-      .c-pause {
-        color: var(--label-badge-blue);
-      }
+		.c-pause {
+			color: var(--label-badge-blue);
+		}
 
-      .c-idle {
-        color: var(--label-badge-grey);
-      }
+		.c-idle {
+			color: var(--label-badge-grey);
+		}
 
-      .c-stopped {
-        color: var(--label-badge-grey);
-      }
+		.c-stopped {
+			color: var(--label-badge-grey);
+		}
 
-      .progressbar {
-        border-radius: 0.4em;
-        margin-bottom: 0.6em;
-        height: 1.4em;
-        display: flex;
-        background-color: #f1f1f1;
-        z-index: 0;
-        position: relative;
-        margin-left: 1.4em;
-        margin-right: 1.4em;
-      }
+		.progressbar {
+			border-radius: 0.4em;
+			margin-bottom: 0.6em;
+			height: 1.4em;
+			display: flex;
+			background-color: #f1f1f1;
+			z-index: 0;
+			position: relative;
+			margin-left: 1.4em;
+			margin-right: 1.4em;
+		}
 
-      .progressin {
-        border-radius: 0.4em;
-        height: 100%;
-        z-index: 1;
-        position: absolute;
-      }
+		.progressin {
+			border-radius: 0.4em;
+			height: 100%;
+			z-index: 1;
+			position: absolute;
+		}
 
-      .download-icon {
-        --mdc-icon-size: 1.4em;
-        z-index: 2;
-        margin-left: .2em;
-        line-height: 1.4em;
-      }
+		.download-icon {
+			--mdc-icon-size: 1.4em;
+			z-index: 2;
+			margin-left: .2em;
+			line-height: 1.4em;
+		}
 
-      .mode-compact .download-icon {
-        color: var(--text-light-primary-color, var(--primary-text-color));
-      }
+		.mode-compact .download-icon {
+			color: var(--text-light-primary-color, var(--primary-text-color));
+		}
 
-      .name {
-        margin-left: 0.7em;
-        width: calc(100% - 60px);
-        overflow: hidden;
-        z-index: 2;
-        color: var(--text-light-primary-color, var(--primary-text-color));
-        line-height: 1.4em;
-      }
+		.name {
+			margin-left: 0.7em;
+			width: calc(100% - 60px);
+			overflow: hidden;
+			z-index: 2;
+			color: var(--text-light-primary-color, var(--primary-text-color));
+			line-height: 1.4em;
+		}
 
-      .percent {
-        vertical-align: middle;
-        z-index: 2;
-        margin-left: 1.7em;
-        margin-right: 0.7em;
-        color: var(--text-light-primary-color, var(--primary-text-color));
-        line-height: 1.4em;
-      }
+		.percent {
+			vertical-align: middle;
+			z-index: 2;
+			margin-left: 1.7em;
+			margin-right: 0.7em;
+			color: var(--text-light-primary-color, var(--primary-text-color));
+			line-height: 1.4em;
+		}
 
-      /* Download status */
+		/* Download status */
 
-      .downloading {
-        background-color: var(--state-active-color);
-      }
+		.downloading {
+			background-color: var(--state-active-color);
+		}
 
-      .stopped {
-        background-color: var(--state-inactive-color);
-      }
+		.stopped {
+			background-color: var(--state-inactive-color);
+		}
 
-      .finished {
-        background-color: var(--light-primary-color);
-      }
+		.finished {
+			background-color: var(--light-primary-color);
+		}
 
-      .links {
-        margin-left: 1.5em;
-      }
+		.links {
+			margin-left: 1.5em;
+		}
 
-      .title-item-icon {
-        display: inline-block;
-        padding-top: 12px;
-      }
+		.title-item-icon {
+			display: inline-block;
+			padding-top: 12px;
+		}
 
-      .title-item-button {
-        font-size: var(--paper-font-body1_-_font-size);
-      }
+		.title-item-button {
+			font-size: var(--paper-font-body1_-_font-size);
+		}
 
-      .down-color {
-        color: var(--paper-item-icon-active-color);
-      }
+		.down-color {
+			color: var(--paper-item-icon-active-color);
+		}
 
-      #toolbar-container {
-        position: relative;
-        display: inline;
-        width: 100%;
-      }
+		#toolbar-container {
+			position: relative;
+			display: inline;
+			width: 100%;
+		}
 
-      #toolbar {
-        display: flex;
-        flex-wrap: wrap;
-        justify-content: center;
-        width: 100%;
-      }
+		#toolbar {
+			display: flex;
+			flex-wrap: wrap;
+			justify-content: center;
+			width: 100%;
+		}
 
-      .titleitem {
-        width: auto;
-        margin-left: 0.7em;
-      }
+		.titleitem {
+			width: auto;
+			margin-left: 0.7em;
+		}
 
-      .status {
-        font-size: 1em;
-      }
+		.status {
+			font-size: 1em;
+		}
 
-      .speed_limit_off {
-        color: var(--light-primary-color);
-      }
+		.speed_limit_off {
+			color: var(--light-primary-color);
+		}
 
-      .speed_limit_on {
-        color: var(--paper-item-icon-active-color);
-      }
+		.speed_limit_on {
+			color: var(--paper-item-icon-active-color);
+		}
 
-      .pause_off {
-        color: var(--light-primary-color);
-      }
+		.pause_off {
+			color: var(--light-primary-color);
+		}
 
-      .pause_on, .play_on, .stop_on {
-        color: var(--primary-color);
-      }
+		.pause_on, .play_on, .stop_on {
+			color: var(--primary-color);
+		}
 
-      .play_off, .stop_off {
-        color: var(--label-badge-grey);
-      }
+		.play_off, .stop_off {
+			color: var(--label-badge-grey);
+		}
 
-      .no-downloads, .no-sensor {
-        margin-left: 1.4em;
-      }
+		.no-downloads, .no-sensor {
+			margin-left: 1.4em;
+		}
 
-      .no-sensor {
-        color: var(--error-color);
-      }
+		.no-sensor {
+			color: var(--error-color);
+		}
 
-      .mode-full {
-        margin-left: 1.4em;
-        margin-right: 1.4em;
-      }
+		.mode-full {
+			margin-left: 1.4em;
+			margin-right: 1.4em;
+		}
 
-      .mode-full .progressbar {
-        margin: 0 0 0 0;
-        height: 4px;
-      }
+		.mode-full .progressbar {
+			margin: 0 0 0 0;
+			height: 4px;
+		}
 
-      .package_name, .link_name {
-        overflow: hidden;
-        text-overflow: ellipsis;
-        white-space: nowrap;
-      }
+		.package_name, .link_name {
+			overflow: hidden;
+			text-overflow: ellipsis;
+			white-space: nowrap;
+		}
 
-      .package_status, .link_status {
-        font-size: 0.7em;
-      }
+		.package_status, .link_status {
+			font-size: 0.7em;
+		}
 
-      .package_details, .link_details {
-        font-size: 0.7em;
-      }
-    `;
+		.package_details, .link_details {
+			font-size: 0.7em;
+		}
+	`;
 }
