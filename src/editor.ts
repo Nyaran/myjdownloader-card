@@ -29,7 +29,7 @@ const SCHEMA = [
 				name: 'list_mode',
 				selector: {
 					select: {
-						options: ['full', 'packages', 'links'].map(value => ({
+						options: ['full', 'full-collapsed', 'packages', 'links'].map(value => ({
 							value,
 							label: localize(`config.list_mode_label.${value}`),
 						})),

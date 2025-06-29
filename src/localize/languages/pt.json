@@ -15,10 +15,11 @@
 		"list_mode": "Modo de lista",
 		"list_mode_label": {
 			"full": "Completo",
+			"full-collapsed": "[NT] Full Collapsed",
 			"packages": "Pacotes",
 			"links": "Links"
 		},
-		"wrong_list_mode": "'list_mode' aceita apenas 'full', 'packages' e 'links' como valor",
+		"wrong_list_mode": "'list_mode' aceita apenas 'full', 'full-collapsed', 'packages' e 'links' como valor",
 		"default_instance": "Instância padrão",
 		"hide_title": "Ocultar título",
 		"hide_instance": "Ocultar selecionador de instância",

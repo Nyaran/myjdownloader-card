@@ -60,7 +60,7 @@ export class MyJDownloaderCard extends LitElement {
 		if (config.display_mode !== undefined && !['compact', 'full'].includes(config.display_mode)) {
 			throw new Error(localize('config.wrong_display_mode'));
 		}
-		if (config.list_mode !== undefined && !['full', 'packages', 'links'].includes(config.list_mode)) {
+		if (config.list_mode !== undefined && !['full', 'full-collapsed', 'packages', 'links'].includes(config.list_mode)) {
 			throw new Error(localize('config.wrong_list_mode'));
 		}
 
@@ -184,7 +184,7 @@ export class MyJDownloaderCard extends LitElement {
 			renderLinkMethod = this.renderDownloadLinkFull.bind(this);
 		}
 
-		if (['full', 'packages'].includes(this.config.list_mode as string)) {
+		if (['full', 'full-collapsed', 'packages'].includes(this.config.list_mode as string)) {
 			return Object.entries(downloads).map(([uuid, pack]) => renderPackageMethod(parseInt(uuid), pack as Package));
 		}
 		return Object.values(downloads).map(downloadLink => renderLinkMethod(downloadLink as DownloadLink));
@@ -245,7 +245,7 @@ export class MyJDownloaderCard extends LitElement {
 	_getDownloads() {
 		const downloads = {} as Downloads;
 
-		if (['full', 'packages'].includes(this.config.list_mode as string)) {
+		if (['full', 'full-collapsed', 'packages'].includes(this.config.list_mode as string)) {
 			if (typeof this.hass.states[`sensor.${this.config.sensor_name}_${this.selectedInstanceEntity}_packages`] === 'undefined') {
 				throw new Error('error.no_sensor_packages');
 			} else {
@@ -256,7 +256,7 @@ export class MyJDownloaderCard extends LitElement {
 			}
 		}
 
-		if (['full', 'links'].includes(this.config.list_mode as string)) {
+		if (['full', 'full-collapsed', 'links'].includes(this.config.list_mode as string)) {
 			if (typeof this.hass.states[`sensor.${this.config.sensor_name}_${this.selectedInstanceEntity}_links`] === 'undefined') {
 				throw new Error('error.no_sensor_links');
 			} else {
@@ -264,7 +264,7 @@ export class MyJDownloaderCard extends LitElement {
 				links.forEach((link: DownloadLink) => {
 					const linkData = this._buildDownloadLink(link);
 
-					if (this.config.list_mode === 'full') {
+					if (['full', 'full-collapsed'].includes(this.config.list_mode)) {
 						(downloads[link.packageUUID] as Package).links.push(linkData);
 					} else {
 						downloads[link.uuid] = linkData;
@@ -399,18 +399,29 @@ export class MyJDownloaderCard extends LitElement {
 		`;
 	}
 
+	_toggleCollapsePackage(ev: MouseEvent) {
+		const target = ev.currentTarget as HTMLElement;
+		if (target.classList.contains('package')) {
+			target.classList.toggle('collapsed');
+		}
+	}
+
 	renderPackage(uuid: number, pack: Package) {
 		return html`
           <div class="package-container ${uuid}">
-            <div class="progressbar">
-              <div class="${this._downloadStatus(pack)} progressin"
-                   style="width: ${pack.percent}%"></div>
-              <ha-icon class="download-icon" icon="mdi:package-variant"></ha-icon>
-              <div class="name"><a title="${pack.name}">${pack.name}</a></div>
-              <!-- Using <a /> just as a quick hack to display a tooltip, improve in future release -->
-              <div class="percent">${pack.percent.toFixed(2)}%</div>
-            </div>
-            ${this.config.list_mode === 'full' ? html`
+			  <div class="package ${this.config.list_mode === 'full-collapsed' ? 'collapsed': ''}" @click="${this._toggleCollapsePackage.bind(this)}">
+				  <div class="progressbar">
+					  <div class="${this._downloadStatus(pack)} progressin"
+						   style="width: ${pack.percent}%"></div>
+					  <ha-icon class="download-icon download-icon-open" icon="mdi:package-variant"></ha-icon>
+					  <ha-icon class="download-icon download-icon-closed" icon="mdi:package-variant-closed"></ha-icon>
+					  <div class="name"><a title="${pack.name}">${pack.name}</a></div>
+					  <!-- Using <a /> just as a quick hack to display a tooltip, improve in future release -->
+					  <div class="percent">${pack.percent.toFixed(2)}%</div>
+				  </div>
+			  </div>
+
+            ${['full', 'full-collapsed'].includes(this.config.list_mode) ? html`
               <div class="links">${pack.links.map(link => this.renderDownloadLink(link))}</div>` : ''}
           </div>
 		`;
@@ -431,9 +442,10 @@ export class MyJDownloaderCard extends LitElement {
 	renderPackageFull(uuid: number, pack: Package) {
 		return html`
           <div class="package-container ${uuid}">
-            <div class="package">
+            <div class="package ${this.config.list_mode === 'full-collapsed' ? 'collapsed': ''}" @click="${this._toggleCollapsePackage.bind(this)}">
               <div class="package_name">
-                <ha-icon class="download-icon" icon="mdi:package-variant"></ha-icon>
+			    <ha-icon class="download-icon download-icon-open" icon="mdi:package-variant"></ha-icon>
+			    <ha-icon class="download-icon download-icon-closed" icon="mdi:package-variant-closed"></ha-icon>
                 <a title="${pack.name}">${pack.name}</a></div>
               <div class="package_status">${localize(`status.${this._downloadStatus(pack)}`)}</div>
               <div class="progressbar">
@@ -702,6 +714,18 @@ export class MyJDownloaderCard extends LitElement {
 			line-height: 1.4em;
 		}
 
+		.download-icon-closed {
+			display: none;
+		}
+
+		.package.collapsed .download-icon-open {
+			display: none;
+		}
+
+		.package.collapsed .download-icon-closed {
+			display: inline-block;
+		}
+
 		.mode-compact .download-icon {
 			color: var(--text-light-primary-color, var(--primary-text-color));
 		}
@@ -740,6 +764,12 @@ export class MyJDownloaderCard extends LitElement {
 
 		.links {
 			margin-left: 1.5em;
+			max-height: 100%;
+		}
+
+		.package.collapsed ~ .links {
+			max-height: 0;
+			overflow: hidden;
 		}
 
 		.title-item-icon {
