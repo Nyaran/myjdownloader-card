@@ -15,10 +15,11 @@
 		"list_mode": "List mode",
 		"list_mode_label": {
 			"full": "Full",
+			"full-collapsed": "Full Collapsed",
 			"packages": "Packages",
 			"links": "Links"
 		},
-		"wrong_list_mode": "'list_mode' accepts only 'full', 'packages' and 'links' as value",
+		"wrong_list_mode": "'list_mode' accepts only 'full', 'full-collapsed', 'packages' and 'links' as value",
 		"default_instance": "Default instance",
 		"hide_title": "Hide title",
 		"hide_instance": "Hide instance selector",
