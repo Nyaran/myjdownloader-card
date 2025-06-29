@@ -681,11 +681,11 @@ export class MyJDownloaderCard extends LitElement {
 		}
 
 		.c-idle {
-			color: var(--label-badge-grey);
+			color: var(--state-inactive-color);
 		}
 
 		.c-stopped {
-			color: var(--label-badge-grey);
+			color: var(--state-inactive-color);
 		}
 
 		.progressbar {
@@ -778,11 +778,11 @@ export class MyJDownloaderCard extends LitElement {
 		}
 
 		.title-item-button {
-			font-size: var(--paper-font-body1_-_font-size);
+			font-size: var(--ha-font-size-m);
 		}
 
 		.down-color {
-			color: var(--paper-item-icon-active-color);
+			color: var(--state-active-color);
 		}
 
 		#toolbar-container {
@@ -813,7 +813,7 @@ export class MyJDownloaderCard extends LitElement {
 		}
 
 		.speed_limit_on {
-			color: var(--paper-item-icon-active-color);
+			color: var(--state-active-color);
 		}
 
 		.pause_off {
@@ -825,7 +825,7 @@ export class MyJDownloaderCard extends LitElement {
 		}
 
 		.play_off, .stop_off {
-			color: var(--label-badge-grey);
+			color: var(--state-inactive-color);
 		}
 
 		.no-downloads, .no-sensor {
