@@ -80,7 +80,9 @@ export class MyJDownloaderCard extends LitElement {
 			hide_pause: false,
 			hide_stop: false,
 			hide_speed_limit: false,
+			hide_toggle_finished: false,
 			hide_refresh: false,
+			show_finished_downloads: true,
 			refresh_interval: {
 				hours: 0,
 				minutes: 1,
@@ -146,7 +148,7 @@ export class MyJDownloaderCard extends LitElement {
 				${this.renderAddLink()}
 				${this.renderToolbar()}
 			</div>
-			<div id="downloads">
+			<div id="downloads" class="${this.config.show_finished_downloads ? '' : 'hide-finished'}">
 				${this._renderDownloads()}
 			</div>
           </ha-card>
@@ -316,6 +318,15 @@ export class MyJDownloaderCard extends LitElement {
 		await this.hass.callService('switch', 'toggle', { entity_id: `switch.${this.config.sensor_name}_${this._selectedInstanceEntity}_limit` });
 	}
 
+	_hideFinished() {
+		const downloadsContainer = this.shadowRoot?.getElementById('downloads') as HTMLElement;
+		downloadsContainer.classList.toggle('hide-finished');
+		const toggleButton = this.shadowRoot?.getElementById('toggle_hide_finished') as HTMLButtonElement;
+		['on', 'off'].forEach((state) => {
+			toggleButton.classList.toggle(`toggle_hide_finished_${state}`);
+		});
+	}
+
 	async _addLink() {
 		const linkInput = this.shadowRoot?.getElementById('add-link-input') as any;
 		const addButton = this.shadowRoot?.getElementById('add_link') as HTMLButtonElement;
@@ -394,7 +405,8 @@ export class MyJDownloaderCard extends LitElement {
             ${this.renderPauseButton()}
             ${this.renderStopButton()}
             ${this.renderLimitButton()}
-            ${this.renderRefreshButton()}
+			${this.renderHideFinishedButton()}
+		    ${this.renderRefreshButton()}
           </div>
 		`;
 	}
@@ -408,63 +420,67 @@ export class MyJDownloaderCard extends LitElement {
 
 	renderPackage(uuid: number, pack: Package) {
 		return html`
-          <div class="package-container ${uuid}">
-			  <div class="package ${this.config.list_mode === 'full-collapsed' ? 'collapsed': ''}" @click="${this._toggleCollapsePackage.bind(this)}">
-				  <div class="progressbar">
-					  <div class="${this._downloadStatus(pack)} progressin"
-						   style="width: ${pack.percent}%"></div>
-					  <ha-icon class="download-icon download-icon-open" icon="mdi:package-variant"></ha-icon>
-					  <ha-icon class="download-icon download-icon-closed" icon="mdi:package-variant-closed"></ha-icon>
-					  <div class="name"><a title="${pack.name}">${pack.name}</a></div>
-					  <!-- Using <a /> just as a quick hack to display a tooltip, improve in future release -->
-					  <div class="percent">${pack.percent.toFixed(2)}%</div>
-				  </div>
+		  <div class="download-item package ${this.config.list_mode === 'full-collapsed' ? 'collapsed': ''}" @click="${this._toggleCollapsePackage.bind(this)}" data-uuid="${uuid}">
+			  <div class="progressbar">
+				  <div class="${this._downloadStatus(pack)} progressin"
+					   style="width: ${pack.percent}%"></div>
+				  ${this._renderPackageIcons()}
+				  <div class="name"><a title="${pack.name}">${pack.name}</a></div>
+				  <!-- Using <a /> just as a quick hack to display a tooltip, improve in future release -->
+				  <div class="percent">${pack.percent.toFixed(2)}%</div>
 			  </div>
+		  </div>
 
-            ${['full', 'full-collapsed'].includes(this.config.list_mode) ? html`
-              <div class="links">${pack.links.map(link => this.renderDownloadLink(link))}</div>` : ''}
-          </div>
+		${['full', 'full-collapsed'].includes(this.config.list_mode) ? html`
+		  <div class="links">${pack.links.map(link => this.renderDownloadLink(link))}</div>` : ''}
+		`;
+	}
+
+	_renderPackageIcons() {
+		return html`
+			<ha-icon class="download-icon download-icon-open" icon="mdi:package-variant"></ha-icon>
+			<ha-icon class="download-icon download-icon-closed" icon="mdi:package-variant-closed"></ha-icon>
 		`;
 	}
 
 	renderDownloadLink(downloadLink: DownloadLink) {
 		return html`
-          <div class="progressbar">
-            <div class="${this._downloadStatus(downloadLink)} progressin"
-                 style="width: ${downloadLink.percent}%"></div>
-            <ha-icon class="download-icon" icon="mdi:download"></ha-icon>
-            <div class="name"><a title="${downloadLink.name}">${downloadLink.name}</a></div>
-            <div class="percent">${downloadLink.percent.toFixed(2)}%</div>
-          </div>
+			<div class="download-item link">
+				<div class="progressbar">
+					<div class="${this._downloadStatus(downloadLink)} progressin"
+						 style="width: ${downloadLink.percent}%"></div>
+					<ha-icon class="download-icon" icon="mdi:download"></ha-icon>
+					<div class="name"><a title="${downloadLink.name}">${downloadLink.name}</a></div>
+					<div class="percent">${downloadLink.percent.toFixed(2)}%</div>
+				</div>
+			</div>
 		`;
 	}
 
 	renderPackageFull(uuid: number, pack: Package) {
 		return html`
-          <div class="package-container ${uuid}">
-            <div class="package ${this.config.list_mode === 'full-collapsed' ? 'collapsed': ''}" @click="${this._toggleCollapsePackage.bind(this)}">
-              <div class="package_name">
-			    <ha-icon class="download-icon download-icon-open" icon="mdi:package-variant"></ha-icon>
-			    <ha-icon class="download-icon download-icon-closed" icon="mdi:package-variant-closed"></ha-icon>
-                <a title="${pack.name}">${pack.name}</a></div>
-              <div class="package_status">${localize(`status.${this._downloadStatus(pack)}`)}</div>
-              <div class="progressbar">
-                <div class="${this._downloadStatus(pack)} progressin"
-                     style="width: ${pack.percent}%">
-                </div>
-              </div>
-              <div class="package_details">${pack.percent.toFixed(2)} %</div>
+            <div class="download-item package ${this.config.list_mode === 'full-collapsed' ? 'collapsed': ''}" @click="${this._toggleCollapsePackage.bind(this)}" data-uuid="${uuid}">
+				<div class="package_name">
+					${this._renderPackageIcons()}
+					<a title="${pack.name}">${pack.name}</a></div>
+				<div class="package_status">${localize(`status.${this._downloadStatus(pack)}`)}</div>
+				<div class="progressbar">
+					<div class="${this._downloadStatus(pack)} progressin"
+						 style="width: ${pack.percent}%">
+					</div>
+				</div>
+				<div class="package_details">${pack.percent.toFixed(2)} %</div>
+				</div>
             </div>
-            <div class="links">
-              ${pack.links.map(link => this.renderDownloadLinkFull(link))}
-            </div>
-          </div>
+
+			<div class="links">
+				${pack.links.map(link => this.renderDownloadLinkFull(link))}
 		`;
 	}
 
 	renderDownloadLinkFull(downloadLink: DownloadLink) {
 		return html`
-          <div class="link">
+          <div class="download-item link">
             <div class="link_name">
               <ha-icon class="download-icon" icon="mdi:download"></ha-icon>
               <a title="${downloadLink.name}">${downloadLink.name}</a></div>
@@ -575,6 +591,24 @@ export class MyJDownloaderCard extends LitElement {
                 title="${localize('actions.refresh')}"
 				path="${mdi.mdiReload}"
                 id="refresh">
+            </ha-icon-button>
+          </div>
+		`;
+	}
+
+	renderHideFinishedButton() {
+		if (this.config.hide_toggle_finished) {
+			return html``;
+		}
+		const state = this.config.show_finished_downloads ? 'on' : 'off';
+		return html`
+          <div class="titleitem">
+            <ha-icon-button
+                class="toggle_hide_finished_${state}"
+                @click="${this._hideFinished.bind(this)}"
+                title="${localize('actions.toggle_hide_finished')}"
+				path="${mdi.mdiEyeCheckOutline}"
+                id="toggle_hide_finished">
             </ha-icon-button>
           </div>
 		`;
@@ -692,6 +726,10 @@ export class MyJDownloaderCard extends LitElement {
 			color: var(--state-inactive-color);
 		}
 
+		#downloads.hide-finished .download-item:has(> .progressbar > .finished) {
+			display: none;
+		}
+
 		.progressbar {
 			border-radius: 0.4em;
 			margin-bottom: 0.6em;
@@ -722,8 +760,12 @@ export class MyJDownloaderCard extends LitElement {
 			display: none;
 		}
 
-		.package.collapsed .download-icon-open {
+		.download-icon-open {
 			display: none;
+		}
+
+		.package:not(.collapsed) .download-icon-open {
+			display: inline-block;
 		}
 
 		.package.collapsed .download-icon-closed {
@@ -810,6 +852,14 @@ export class MyJDownloaderCard extends LitElement {
 
 		.status {
 			font-size: 1em;
+		}
+
+		.toggle_hide_finished_off {
+			color: var(--light-primary-color);
+		}
+
+		.toggle_hide_finished_on {
+			color: var(--state-active-color);
 		}
 
 		.speed_limit_off {

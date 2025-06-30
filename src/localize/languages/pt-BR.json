@@ -27,6 +27,8 @@
 		"hide_pause": "Ocultar botão de pausar",
 		"hide_stop": "Ocultar botão de parar",
 		"hide_speed_limit": "Ocultar botão de limite de velocidade",
+		"hide_toggle_finished": "[NT] Hide the \"Show/Hide finished downloads\" button",
+		"show_finished_downloads": "[NT] Show finished downloads",
 		"hide_add_link": "[NT] Hide add link",
 		"hide_refresh": "[NT] Hide refresh button",
 		"refresh_interval": "[NT] Refresh interval"
@@ -53,6 +55,7 @@
 		"pause": "Pausar Downloads",
 		"stop": "Parar Downloads",
 		"speed_limit": "Limite de Velocidade",
+		"toggle_hide_finished": "[NT] Show/Hide finished downloads",
 		"refresh": "[NT] Refresh",
 		"add_link": {
 			"label": "[NT] Add link",

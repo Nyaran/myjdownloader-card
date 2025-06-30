@@ -24,6 +24,8 @@ export interface MyJDownloaderCardConfig extends LovelaceCardConfig {
 	hide_pause?: boolean;
 	hide_stop?: boolean,
 	hide_speed_limit?: boolean;
+	hide_toggle_finished?: boolean;
+	show_finished_downloads?: boolean;
 	hide_refresh?: boolean,
 	refresh_interval?: {
 		hours?: number,
