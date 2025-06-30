@@ -27,6 +27,8 @@
 		"hide_pause": "Ocultar botón pausa",
 		"hide_stop": "Ocultar botón parar",
 		"hide_speed_limit": "Ocultar botón límite velocidad",
+		"hide_toggle_finished": "Ocultar botón \"Mostrar/Ocultar descargas finalizadas\"",
+		"show_finished_downloads": "Mostrar descargas finalizadas",
 		"hide_add_link": "Ocultar botón añadir enlace",
 		"hide_refresh": "Ocultar botón recargar",
 		"refresh_interval": "Intervalo de recarga"
@@ -50,6 +52,7 @@
 	},
 	"actions": {
 		"speed_limit": "Límite velocidad",
+		"toggle_hide_finished": "Mostar/Ocultar finalizadas",
 		"play": "Iniciar Descargas",
 		"pause": "Pausar Descargas",
 		"stop": "Parar Descargas",
