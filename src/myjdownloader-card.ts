@@ -420,19 +420,20 @@ export class MyJDownloaderCard extends LitElement {
 
 	renderPackage(uuid: number, pack: Package) {
 		return html`
-		  <div class="download-item package ${this.config.list_mode === 'full-collapsed' ? 'collapsed': ''}" @click="${this._toggleCollapsePackage.bind(this)}" data-uuid="${uuid}">
-			  <div class="progressbar">
-				  <div class="${this._downloadStatus(pack)} progressin"
-					   style="width: ${pack.percent}%"></div>
-				  ${this._renderPackageIcons()}
-				  <div class="name"><a title="${pack.name}">${pack.name}</a></div>
-				  <!-- Using <a /> just as a quick hack to display a tooltip, improve in future release -->
-				  <div class="percent">${pack.percent.toFixed(2)}%</div>
-			  </div>
-		  </div>
+			<div class="download-item package ${this.config.list_mode === 'full-collapsed' ? 'collapsed' : ''}"
+				 @click="${this._toggleCollapsePackage.bind(this)}" data-uuid="${uuid}">
+				<div class="progressbar">
+					<div class="${this._downloadStatus(pack)} progressin"
+						 style="width: ${pack.percent}%"></div>
+					${this._renderPackageIcons()}
+					<div class="name"><a title="${pack.name}">${pack.name}</a></div>
+					<!-- Using <a /> just as a quick hack to display a tooltip, improve in future release -->
+					<div class="percent">${pack.percent.toFixed(2)}%</div>
+				</div>
 
-		${['full', 'full-collapsed'].includes(this.config.list_mode) ? html`
-		  <div class="links">${pack.links.map(link => this.renderDownloadLink(link))}</div>` : ''}
+				${['full', 'full-collapsed'].includes(this.config.list_mode) ? html`
+					<div class="links">${pack.links.map(link => this.renderDownloadLink(link))}</div>` : ''}
+			</div>
 		`;
 	}
 
@@ -459,22 +460,20 @@ export class MyJDownloaderCard extends LitElement {
 
 	renderPackageFull(uuid: number, pack: Package) {
 		return html`
-            <div class="download-item package ${this.config.list_mode === 'full-collapsed' ? 'collapsed': ''}" @click="${this._toggleCollapsePackage.bind(this)}" data-uuid="${uuid}">
+			<div class="download-item package ${this.config.list_mode === 'full-collapsed' ? 'collapsed' : ''}"
+				 @click="${this._toggleCollapsePackage.bind(this)}" data-uuid="${uuid}">
 				<div class="package_name">
 					${this._renderPackageIcons()}
-					<a title="${pack.name}">${pack.name}</a></div>
+					<a title="${pack.name}">${pack.name}</a>
+				</div>
 				<div class="package_status">${localize(`status.${this._downloadStatus(pack)}`)}</div>
 				<div class="progressbar">
-					<div class="${this._downloadStatus(pack)} progressin"
-						 style="width: ${pack.percent}%">
-					</div>
+					<div class="${this._downloadStatus(pack)} progressin" style="width: ${pack.percent}%"></div>
 				</div>
 				<div class="package_details">${pack.percent.toFixed(2)} %</div>
-				</div>
-            </div>
 
-			<div class="links">
-				${pack.links.map(link => this.renderDownloadLinkFull(link))}
+				<div class="links">${pack.links.map(link => this.renderDownloadLinkFull(link))}</div>
+			</div>
 		`;
 	}
 
@@ -813,7 +812,7 @@ export class MyJDownloaderCard extends LitElement {
 			max-height: 100%;
 		}
 
-		.package.collapsed ~ .links {
+		.package.collapsed > .links {
 			max-height: 0;
 			overflow: hidden;
 		}
