@@ -9,7 +9,6 @@ export function slugify(value: string, delimiter = '_'): string {
 	const p = new RegExp(a.split('').join('|'), 'g');
 
 	return value
-		.toString()
 		.toLowerCase()
 		.replace(/\s+/g, delimiter) // Replace spaces with delimiter
 		.replace(p, (c) => b.charAt(a.indexOf(c))) // Replace special characters
