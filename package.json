@@ -63,7 +63,7 @@
 		"rimraf": "6.0.1",
 		"rollup": "4.52.3",
 		"rollup-plugin-serve": "3.0.0",
-		"typescript": "5.9.2",
+		"typescript": "5.9.3",
 		"typescript-eslint": "8.45.0"
 	}
 }
