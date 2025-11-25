@@ -96,7 +96,7 @@ export class MyJDownloaderCard extends LitElement {
 		}
 	}
 
-	private _intervalId: number | undefined;
+	private _intervalId?: number;
 
 	connectedCallback() {
 		super.connectedCallback();
